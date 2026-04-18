@@ -1,0 +1,79 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Formation, FormationType, FormationWithPlaces } from "@/models";
+import { fail, ok, type ServiceResult } from "@/models/service-result";
+
+export async function listFormations(supabase: SupabaseClient): Promise<ServiceResult<FormationWithPlaces[]>> {
+  const { data: formations, error } = await supabase
+    .from("formations")
+    .select("*")
+    .order("start_date", { ascending: true });
+  if (error) return fail(error.message);
+  const list = (formations ?? []) as Formation[];
+  const withPlaces: FormationWithPlaces[] = [];
+  for (const f of list) {
+    const { count, error: cErr } = await supabase
+      .from("formation_registrations")
+      .select("id", { count: "exact", head: true })
+      .eq("formation_id", f.id)
+      .in("status", ["pending", "confirmed"]);
+    if (cErr) return fail(cErr.message);
+    const registered = count ?? 0;
+    withPlaces.push({
+      ...f,
+      registered_count: registered,
+      places_left: Math.max(0, f.max_places - registered)
+    });
+  }
+  return ok(withPlaces);
+}
+
+export async function registerToFormation(
+  supabase: SupabaseClient,
+  userId: string,
+  formationId: string
+): Promise<ServiceResult<{ id: string }>> {
+  const places = await listFormations(supabase);
+  if (!places.ok) return fail(places.error);
+  const f = places.data.find((x) => x.id === formationId);
+  if (!f) return fail("Formation introuvable");
+  if (f.places_left <= 0) return fail("Plus de places disponibles");
+  const { data, error } = await supabase
+    .from("formation_registrations")
+    .insert({ formation_id: formationId, user_id: userId })
+    .select("id")
+    .single();
+  if (error) return fail(error.message);
+  return ok({ id: data.id as string });
+}
+
+export async function listFormationsForAdmin(supabase: SupabaseClient): Promise<ServiceResult<Formation[]>> {
+  const { data, error } = await supabase.from("formations").select("*").order("start_date", { ascending: true });
+  if (error) return fail(error.message);
+  return ok((data ?? []) as Formation[]);
+}
+
+export async function createFormation(
+  supabase: SupabaseClient,
+  input: {
+    title: string;
+    type: FormationType;
+    description?: string | null;
+    start_date: string;
+    end_date?: string | null;
+    duration_days: number;
+    location: string;
+    max_places: number;
+  }
+): Promise<ServiceResult<Formation>> {
+  const { data, error } = await supabase
+    .from("formations")
+    .insert({
+      ...input,
+      description: input.description ?? null,
+      end_date: input.end_date ?? null
+    })
+    .select("*")
+    .single();
+  if (error) return fail(error.message);
+  return ok(data as Formation);
+}

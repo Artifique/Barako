@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Charte Baarako — inspirée du logo (bleu pro, teal croissance, orange énergie, or) */
+:root {
+  --primary: #0c4a6e;
+  --secondary: #ea580c;
+  --accent: #b8942e;
+  --dark: #0a1628;
+  --dark-card: #132a36;
+  --light: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+  --teal-brand: #0d9488;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  @apply min-h-screen font-sans text-text-main antialiased;
+  background-color: #eef2f6;
+  background-image:
+    radial-gradient(ellipse 100% 80% at 0% -10%, rgba(12, 74, 110, 0.09), transparent 45%),
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(234, 88, 12, 0.06), transparent 40%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(13, 148, 136, 0.05), transparent 45%);
+}
+
+@layer components {
+  .input-field {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition-shadow placeholder:text-slate-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-0;
+  }
+
+  .input-field:focus,
+  .input-field:focus-visible {
+    border-color: var(--primary);
+    /* ring-primary/20 impossible avec une couleur `var()` dans @apply — anneau explicite */
+    --tw-ring-color: rgba(12, 74, 110, 0.22);
+  }
+
+  .input-field-admin {
+    @apply w-full rounded-lg border border-white/10 bg-dark/60 px-3 py-2 text-sm text-light outline-none transition-shadow;
+    @apply focus:border-teal-400/50 focus:ring-2 focus:ring-teal-400/30;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-200/50 backdrop-blur-md;
+  }
+
+  .hero-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 9999px;
+    background: linear-gradient(to right, #e2e8f0, #e2e8f0);
+  }
+
+  .hero-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #0c4a6e, #0d9488);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(12, 74, 110, 0.35);
+    cursor: pointer;
+  }
+
+  .hero-range::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #0c4a6e, #0d9488);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(12, 74, 110, 0.35);
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
