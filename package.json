@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node ./node_modules/next/dist/bin/next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node ./node_modules/next/dist/bin/next start",
     "lint": "echo Lint desactive - ajoute eslint-config-next si besoin",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "node ./node_modules/typescript/lib/tsc.js --noEmit",
+    "seed:admin": "node scripts/seed-default-admin.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
