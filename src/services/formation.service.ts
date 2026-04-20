@@ -77,3 +77,42 @@ export async function createFormation(
   if (error) return fail(error.message);
   return ok(data as Formation);
 }
+
+export async function updateFormation(
+  supabase: SupabaseClient,
+  id: string,
+  input: {
+    title: string;
+    type: FormationType;
+    description?: string | null;
+    start_date: string;
+    end_date?: string | null;
+    duration_days: number;
+    location: string;
+    max_places: number;
+  }
+): Promise<ServiceResult<Formation>> {
+  const { data, error } = await supabase
+    .from("formations")
+    .update({
+      title: input.title,
+      type: input.type,
+      description: input.description ?? null,
+      start_date: input.start_date,
+      end_date: input.end_date ?? null,
+      duration_days: input.duration_days,
+      location: input.location,
+      max_places: input.max_places
+    })
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) return fail(error.message);
+  return ok(data as Formation);
+}
+
+export async function deleteFormation(supabase: SupabaseClient, id: string): Promise<ServiceResult<void>> {
+  const { error } = await supabase.from("formations").delete().eq("id", id);
+  if (error) return fail(error.message);
+  return ok(undefined);
+}

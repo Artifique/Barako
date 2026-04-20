@@ -65,3 +65,9 @@ export async function listJobOffersForAdmin(supabase: SupabaseClient): Promise<S
   if (error) return fail(error.message);
   return ok((data ?? []) as JobOfferWithCompany[]);
 }
+
+export async function deleteJobOffer(supabase: SupabaseClient, id: string): Promise<ServiceResult<void>> {
+  const { error } = await supabase.from("job_offers").delete().eq("id", id);
+  if (error) return fail(error.message);
+  return ok(undefined);
+}

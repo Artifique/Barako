@@ -10,7 +10,7 @@ const variants: Record<Variant, string> = {
   secondary:
     "bg-secondary text-white hover:bg-secondary/92 shadow-md shadow-secondary/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary",
   outline:
-    "border-2 border-primary/35 bg-white text-primary hover:border-primary hover:bg-primary/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+    "border-2 border-primary/35 bg-white text-primary hover:border-primary hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
   ghost:
     "text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
 };

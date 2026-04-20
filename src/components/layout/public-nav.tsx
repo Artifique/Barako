@@ -3,26 +3,16 @@ import Image from "next/image";
 import { createClientOptional } from "@/lib/supabase/server";
 import { signOut } from "@/controllers/auth.controller";
 import { Button } from "@/components/ui/button";
-
-const links = [
-  { href: "/offres", label: "Offres" },
-  { href: "/projets", label: "Projets" },
-  { href: "/formations", label: "Formations" }
-];
+import { MainNavLinks } from "@/components/layout/main-nav-links";
 
 export async function PublicNav() {
   const supabase = await createClientOptional();
   let user: { id: string } | null = null;
-  let role: string | null = null;
   if (supabase) {
     const {
       data: { user: u }
     } = await supabase.auth.getUser();
     user = u;
-    if (u) {
-      const { data } = await supabase.from("profiles").select("role").eq("id", u.id).single();
-      role = data?.role ?? null;
-    }
   }
 
   return (
@@ -45,28 +35,27 @@ export async function PublicNav() {
           </span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="text-sm font-medium text-slate-600 transition hover:text-primary"
-            >
-              {l.label}
-            </Link>
-          ))}
-          {role === "admin" && (
-            <Link href="/admin" className="text-sm font-semibold text-secondary">
-              Admin
+          <MainNavLinks />
+          {user && (
+            <Link href="/profil" className="text-sm font-medium text-slate-600 transition hover:text-primary">
+              Mon profil
             </Link>
           )}
         </nav>
         <div className="flex items-center gap-2">
           {user ? (
-            <form action={signOut}>
-              <Button type="submit" variant="ghost" size="sm">
-                Déconnexion
-              </Button>
-            </form>
+            <>
+              <Link href="/profil" className="md:hidden">
+                <Button variant="outline" size="sm">
+                  Profil
+                </Button>
+              </Link>
+              <form action={signOut}>
+                <Button type="submit" variant="ghost" size="sm">
+                  Déconnexion
+                </Button>
+              </form>
+            </>
           ) : (
             <>
               <Link href="/auth/connexion">
@@ -78,13 +67,6 @@ export async function PublicNav() {
                 <Button size="sm">S’inscrire</Button>
               </Link>
             </>
-          )}
-          {user && (
-            <Link href="/profil">
-              <Button variant="outline" size="sm">
-                Profil
-              </Button>
-            </Link>
           )}
         </div>
       </div>

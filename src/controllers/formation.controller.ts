@@ -40,3 +40,31 @@ export async function createFormationAdminAction(input: {
   revalidatePath("/admin/formations");
   return res;
 }
+
+export async function updateFormationAdminAction(
+  id: string,
+  input: {
+    title: string;
+    type: FormationType;
+    description?: string | null;
+    start_date: string;
+    end_date?: string | null;
+    duration_days: number;
+    location: string;
+    max_places: number;
+  }
+) {
+  const supabase = await createClient();
+  const res = await FormationService.updateFormation(supabase, id, input);
+  if (res.ok) revalidatePath("/formations");
+  revalidatePath("/admin/formations");
+  return res;
+}
+
+export async function deleteFormationAdminAction(id: string) {
+  const supabase = await createClient();
+  const res = await FormationService.deleteFormation(supabase, id);
+  if (res.ok) revalidatePath("/formations");
+  revalidatePath("/admin/formations");
+  return res;
+}

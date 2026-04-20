@@ -25,34 +25,33 @@ export default async function AdminProjetsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-bold text-light">Projets entrepreneurs</h1>
+      <div>
+        <h1 className="font-display text-2xl font-bold text-slate-900">Projets entrepreneurs</h1>
+        <p className="mt-1 text-sm text-slate-600">Faites avancer les dossiers dans le pipeline.</p>
+      </div>
       <div className="grid gap-4 overflow-x-auto lg:grid-cols-5">
         {columns.map((col) => (
-          <Card variant="dark" key={col.key} className="min-h-[200px]">
-            <h2 className="text-sm font-semibold text-light">{col.title}</h2>
+          <Card glowing key={col.key} className="min-h-[200px]">
+            <h2 className="text-sm font-semibold text-slate-800">{col.title}</h2>
             <div className="mt-3 space-y-2">
               {projects
                 .filter((p) => p.status === col.key)
                 .map((p) => (
-                  <div key={p.id} className="rounded-lg border border-white/10 bg-dark/50 p-2 text-xs">
-                    <p className="font-medium text-light">{p.title}</p>
-                    <p className="text-text-muted">{p.profiles?.full_name}</p>
+                  <div key={p.id} className="rounded-xl border border-slate-100 bg-slate-50/80 p-2 text-xs">
+                    <p className="font-semibold text-slate-900">{p.title}</p>
+                    <p className="text-slate-500">{p.profiles?.full_name}</p>
                     <form action={setProjectStatus} className="mt-2 space-y-1">
                       <input type="hidden" name="id" value={p.id} />
-                      <select
-                        name="status"
-                        defaultValue={p.status}
-                        className="w-full rounded border border-white/10 bg-dark px-1 py-1 text-[11px] text-light"
-                      >
-                        <option value="submitted">submitted</option>
-                        <option value="under_review">under_review</option>
-                        <option value="accepted">accepted</option>
-                        <option value="mentoring">mentoring</option>
-                        <option value="funded">funded</option>
-                        <option value="rejected">rejected</option>
+                      <select name="status" defaultValue={p.status} className="input-field py-1 text-[11px]">
+                        <option value="submitted">Soumis</option>
+                        <option value="under_review">En examen</option>
+                        <option value="accepted">Accepté</option>
+                        <option value="mentoring">Mentorat</option>
+                        <option value="funded">Financé</option>
+                        <option value="rejected">Refusé</option>
                       </select>
                       <Button type="submit" size="sm" className="w-full">
-                        OK
+                        Mettre à jour
                       </Button>
                     </form>
                   </div>

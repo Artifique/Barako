@@ -15,7 +15,7 @@ export async function updateMyProfileAction(input: ProfileUpdateInput) {
   return res;
 }
 
-export async function listUsersAdminAction(filters?: { search?: string; role?: string }) {
+export async function listUsersAdminAction(filters?: { search?: string; role?: string; limit?: number }) {
   const supabase = await createClient();
   return ProfileService.listProfilesForAdmin(supabase, filters);
 }

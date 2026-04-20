@@ -50,6 +50,11 @@ body {
   }
 }
 
+/* Modales admin : fond assombri derrière le <dialog> (navigateurs sans support Tailwind open:backdrop) */
+.admin-modal::backdrop {
+  background: rgba(15, 23, 42, 0.48);
+}
+
 @layer utilities {
   .glass {
     @apply border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-200/50 backdrop-blur-md;

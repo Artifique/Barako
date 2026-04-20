@@ -25,3 +25,13 @@ export async function listCompaniesAdminAction() {
   const supabase = await createClient();
   return CompanyService.listCompaniesForAdmin(supabase);
 }
+
+export async function createCompanyAsAdminAction(ownerId: string, input: CompanyInsertInput) {
+  const supabase = await createClient();
+  const res = await CompanyService.createCompany(supabase, ownerId, input);
+  if (res.ok) {
+    revalidatePath("/admin/entreprises");
+    revalidatePath("/admin/offres");
+  }
+  return res;
+}

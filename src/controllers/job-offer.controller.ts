@@ -40,3 +40,13 @@ export async function listOffersAdminAction() {
   const supabase = await createClient();
   return JobOfferService.listJobOffersForAdmin(supabase);
 }
+
+export async function deleteJobOfferAction(id: string) {
+  const supabase = await createClient();
+  const res = await JobOfferService.deleteJobOffer(supabase, id);
+  if (res.ok) {
+    revalidatePath("/offres");
+    revalidatePath("/admin/offres");
+  }
+  return res;
+}
