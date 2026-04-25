@@ -20,32 +20,50 @@ export default async function FormationsPage() {
     data: { user }
   } = await supabase.auth.getUser();
 
-  return (
-    <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-6">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-64 w-[min(100%,48rem)] -translate-x-1/2 rounded-full bg-gradient-to-b from-[rgb(12_74_110_/_0.07)] via-teal-500/10 to-transparent blur-3xl" />
+  // Logo colors
+  const primaryOrange = "#F57C00"; // Main orange
+  const darkBlue = "#0D47A1";     // Dark blue
+  const lightOrange = "#FFA726";  // Light orange
+  const darkGreen = "#2E8B57";    // Dark green
+  const yellowGold = "#FFD54F";   // Yellow/Gold
 
-      <header className="relative mx-auto max-w-3xl text-center">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-teal-700/90">Parcours certifiants</p>
+  return (
+    <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-6 overflow-hidden" style={{ backgroundColor: '#f0f4f8' /* A subtle light blue-gray background */ }}>
+      {/* Decorative background elements */}
+      <div className="absolute top-0 left-0 w-96 h-96 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-30" style={{ background: `radial-gradient(circle, ${primaryOrange}80, transparent 70%)` }}/>
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 translate-x-1/2 translate-y-1/2 rounded-full blur-2xl opacity-20" style={{ background: `radial-gradient(circle, ${darkGreen}, transparent 70%)` }}/>
+
+      <header className="relative mx-auto max-w-3xl text-center z-10">
+        {/* Eyebrow text using a green tone */}
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em]" style={{ color: darkGreen }}>
+          Parcours certifiants
+        </p>
         <h1 className="mt-3 font-display text-4xl font-extrabold tracking-tight text-slate-900 md:text-[2.65rem] md:leading-[1.1]">
           Formations{" "}
-          <span className="bg-gradient-to-r from-primary via-teal-600 to-secondary bg-clip-text text-transparent">
+          {/* Heading gradient using orange and blue */}
+          <span
+            className="bg-clip-text text-transparent"
+            style={{
+              background: `linear-gradient(to right, ${primaryOrange}, ${darkBlue})`,
+            }}
+          >
             employabilité & entrepreneuriat
           </span>
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600">
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-700">
           Sessions courtes, centrées sur l’emploi et la structuration de projet — dates, lieux et places mis à jour en
           temps réel.
         </p>
       </header>
 
-      <div className="relative mt-14 grid gap-7 md:grid-cols-2">
+      <div className="relative mt-14 grid gap-7 md:grid-cols-2 z-10">
         {formations.map((f) => (
           <FormationTile key={f.id} f={f} isAuthenticated={!!user} />
         ))}
       </div>
 
       {formations.length === 0 && (
-        <Card glowing className="relative mx-auto mt-12 max-w-lg text-center">
+        <Card glowing className="relative mx-auto mt-12 max-w-lg text-center" style={{ borderColor: primaryOrange }}>
           <p className="text-sm leading-relaxed text-slate-600">
             Aucune session pour le moment. Lance le script <span className="font-mono text-xs text-primary">seed.sql</span>{" "}
             dans Supabase pour afficher des exemples.

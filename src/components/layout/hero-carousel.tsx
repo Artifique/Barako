@@ -14,9 +14,10 @@ type Slide = {
   subtitle: string;
   href: string;
   cta: string;
-  panelClass: string;
+  imageSrc?: string; // Added for new images
 };
 
+// Updated slides array with images from the public folder
 const slides: Slide[] = [
   {
     eyebrow: "Bourse Baarako",
@@ -25,7 +26,7 @@ const slides: Slide[] = [
     subtitle: "Parcourez des offres vérifiées, postulez en quelques clics et suivez vos candidatures au même endroit.",
     href: "/offres",
     cta: "Explorer les offres",
-    panelClass: "from-[#0c4a6e] via-[#0e7490] to-[#0d9488]"
+    imageSrc: "/im1.jpeg", // Assuming .jpg extension, adjust if needed
   },
   {
     eyebrow: "Bourse Tchakèda",
@@ -34,7 +35,7 @@ const slides: Slide[] = [
     subtitle: "Soumettez votre idée, accédez au mentorat et aux dispositifs de financement adaptés aux jeunes entrepreneurs.",
     href: "/projets",
     cta: "Soumettre un projet",
-    panelClass: "from-[#0d9488] via-[#059669] to-[#d97706]"
+    imageSrc: "/im2.jpeg", // Assuming .jpg extension, adjust if needed
   },
   {
     eyebrow: "Formations",
@@ -43,8 +44,9 @@ const slides: Slide[] = [
     subtitle: "Parcours employabilité et entrepreneuriat pour gagner en confiance sur le marché du travail.",
     href: "/formations",
     cta: "Voir les formations",
-    panelClass: "from-[#b45309] via-[#ea580c] to-[#0c4a6e]"
-  }
+    imageSrc: "/im3.jpeg", // Assuming .jpg extension, adjust if needed
+  },
+  // Note: Using 3 images for 3 slides. If you intended 4 images, please clarify how they should be used (e.g., a 4th slide).
 ];
 
 export function HeroCarousel() {
@@ -118,21 +120,21 @@ export function HeroCarousel() {
           </div>
         </div>
 
-        <div
-          className={`relative flex min-h-[200px] items-center justify-center bg-gradient-to-br p-6 transition-all duration-700 md:min-h-0 ${slides[index].panelClass}`}
-        >
+        {/* Right panel displaying the image */}
+        <div className={`relative flex min-h-[200px] items-center justify-center p-6 md:min-h-0`}>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_55%)]" />
-          <div className="relative flex w-full max-w-[220px] flex-col items-center drop-shadow-2xl md:max-w-[260px]">
-            <div className="rounded-2xl bg-white/10 p-3 ring-1 ring-white/30 backdrop-blur-sm">
+          <div className="relative w-full max-w-[260px] flex-col items-center drop-shadow-2xl">
+            {slides[index].imageSrc && (
               <Image
-                src="/logo-barako.jpeg"
-                alt="Baarako gèlèya bana"
-                width={220}
-                height={220}
+                src={slides[index].imageSrc}
+                alt={`Slider image for slide ${index + 1}`}
+                width={260} // Adjust size as needed
+                height={260}
                 className="h-auto w-full rounded-xl object-contain"
                 priority
               />
-            </div>
+            )}
+            {/* Keep the text below the image if desired */}
             <p className="mt-4 text-center font-display text-sm font-bold text-white/95">
               Insertion & entrepreneuriat au Mali
             </p>

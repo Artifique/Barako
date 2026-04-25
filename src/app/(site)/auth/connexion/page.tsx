@@ -1,19 +1,35 @@
 import Link from "next/link";
+import Image from "next/image"; // Import Image component
 import { LoginForm } from "@/components/forms/login-form";
 import { Card } from "@/components/ui/card";
 
 export default function ConnexionPage() {
+  const primaryOrange = "#F57C00"; // Main orange from logo
+  const darkBlue = "#0D47A1";     // Dark blue from logo
+  const lightOrange = "#FFA726";  // Light orange from logo
+  const darkGreen = "#2E8B57";    // Dark green from logo
+
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 md:grid-cols-2 md:items-center">
-      <div className="hidden md:block">
-        <p className="font-display text-3xl font-bold text-slate-900">Bon retour sur Baarako</p>
-        <p className="mt-3 text-slate-600">Accède à ton profil, candidatures et formations.</p>
+      {/* Left side: Display login.png image - Removed 'hidden md:block' for responsiveness */}
+      <div className="relative p-8"> {/* Removed 'hidden md:block' */}
+        <Image
+          src="/login.png" // Use login.png as requested
+          alt="Illustration de connexion"
+          width={500} // Adjust width as needed
+          height={500} // Adjust height as needed
+          className="h-auto w-full rounded-xl object-contain drop-shadow-xl"
+          priority
+        />
       </div>
-      <Card>
-        <h1 className="font-display text-2xl font-bold text-slate-900">Connexion</h1>
-        <p className="mt-1 text-sm text-slate-600">
+      {/* Right side: Login Form */}
+      <Card className="border-l-4 border-l-[color:var(--primary-orange)]" style={{ '--primary-orange': primaryOrange } as React.CSSProperties}>
+        <h1 className="font-display text-2xl font-bold text-slate-900" style={{ color: darkBlue }}>
+          Connexion
+        </h1>
+        <p className="mt-1 text-sm leading-relaxed">
           Pas encore de compte ?{" "}
-          <Link href="/auth/inscription" className="font-medium text-primary hover:underline">
+          <Link href="/auth/inscription" className="font-medium hover:underline" style={{ color: primaryOrange }}>
             S’inscrire
           </Link>
         </p>
