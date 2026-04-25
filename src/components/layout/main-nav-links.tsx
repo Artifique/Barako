@@ -10,7 +10,11 @@ const mainLinks = [
   { href: "/formations", label: "Formations", match: (p: string) => p === "/formations" || p.startsWith("/formations/") }
 ];
 
-export function MainNavLinks() {
+interface MainNavLinksProps {
+  onCloseMobileMenu?: () => void;
+}
+
+export function MainNavLinks({ onCloseMobileMenu }: MainNavLinksProps) {
   const pathname = usePathname() ?? "";
 
   return (
@@ -21,6 +25,7 @@ export function MainNavLinks() {
           <Link
             key={l.href}
             href={l.href}
+            onClick={onCloseMobileMenu} // Ajout de l'événement onClick
             className={cn(
               "relative text-sm font-medium transition-colors",
               active ? "text-primary" : "text-slate-600 hover:text-primary"
