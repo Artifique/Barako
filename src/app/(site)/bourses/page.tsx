@@ -5,6 +5,7 @@ import { createClientOptional } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { InteractiveButton } from "@/components/ui/interactive-button";
 
 export default async function OffresPage() {
   const supabase = await createClientOptional();
@@ -42,7 +43,7 @@ export default async function OffresPage() {
         }}
       >
         <h1 className="font-display text-4xl font-extrabold tracking-tight text-white md:text-5xl" style={{ color: 'white' }}>
-          Bourse Baarako — Offres d'Emploi
+          Bourse Baarako — Bourses d'Emploi
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-white/90">
           {offers.length} offre{offers.length > 1 ? "s" : ""} publiée{offers.length > 1 ? "s" : ""}
@@ -53,21 +54,18 @@ export default async function OffresPage() {
         {offers.map((o) => (
           <Card key={o.id} glowing className="flex flex-col" style={{ borderColor: primaryOrange, backgroundColor: '#ffffff' /* White background for cards */ }}>
             <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-xs text-slate-500">{o.companies?.name ?? "Entreprise"}</p>
-                <p className="text-xs text-slate-500">{o.location}</p>
-              </div>
-              {o.companies?.logo_url ? (
+              {/* Image de la bourse */}
+              {o.image_url ? (
                 <Image
-                  src={o.companies.logo_url}
-                  alt={`${o.companies.name} logo`}
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 rounded-lg object-cover ring-1 ring-slate-200"
+                  src={o.image_url}
+                  alt={o.title}
+                  width={200}
+                  height={120}
+                  className="h-24 w-full rounded-lg object-cover ring-1 ring-slate-200"
                 />
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-[10px] font-medium text-slate-400">
-                  LOGO
+                <div className="flex h-24 w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-400">
+                  Pas d'image
                 </div>
               )}
             </div>
@@ -84,11 +82,7 @@ export default async function OffresPage() {
                 : "Rémunération à discuter"}
             </p>
             <div className="mt-auto pt-6">
-              <Link href={`/offres/${o.id}`}>
-                <Button variant="outline" className="w-full" style={{ borderColor: primaryOrange, color: primaryOrange, '--tw-btn-hover-bg-opacity': 1, '--tw-btn-hover-border-opacity': 1 } as React.CSSProperties} onMouseOver={(e) => { e.currentTarget.style.backgroundColor = primaryOrange; e.currentTarget.style.color = 'white'; }} onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = primaryOrange; }}>
-                  Voir détails
-                </Button>
-              </Link>
+              <InteractiveButton href={`/bourses/${o.id}`} primaryOrange={primaryOrange} />
             </div>
           </Card>
         ))}

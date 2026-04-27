@@ -19,7 +19,7 @@ const navSections: { title: string; items: { href: string; label: string; icon: 
   {
     title: "Contenus",
     items: [
-      { href: "/admin/offres", label: "Offres d’emploi", icon: "◆" },
+      { href: "/admin/bourses", label: "Bourses d’emploi", icon: "◆" },
       { href: "/admin/entreprises", label: "Entreprises", icon: "⌂" },
       { href: "/admin/projets", label: "Projets", icon: "◇" },
       { href: "/admin/formations", label: "Formations", icon: "◈" },

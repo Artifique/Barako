@@ -58,3 +58,23 @@ export async function listProjectsForAdmin(supabase: SupabaseClient): Promise<Se
   if (error) return fail(error.message);
   return ok((data ?? []) as ProjectWithOwner[]);
 }
+
+export async function updateProject(
+  supabase: SupabaseClient,
+  projectId: string,
+  input: Partial<ProjectInsertInput>
+): Promise<ServiceResult<void>> {
+  const { error } = await supabase.from("projects").update(input).eq("id", projectId);
+  if (error) return fail(error.message);
+  return ok(undefined);
+}
+
+export async function deleteProject(
+  supabase: SupabaseClient,
+  projectId: string
+): Promise<ServiceResult<void>> {
+  const { error } = await supabase.from("projects").delete().eq("id", projectId);
+  if (error) return fail(error.message);
+  return ok(undefined);
+}
+

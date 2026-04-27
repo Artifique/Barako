@@ -70,7 +70,7 @@ La plateforme a **deux espaces distincts** :
   - 2 CTA buttons : `[🔍 Voir les offres d'emploi]` (vert) et `[💡 Soumettre mon projet]` (orange outline)
   - Badge animé : `"✨ +500 jeunes insérés"` flottant
 - Compteurs animés (CountUp) : 
-  - `250+ Offres d'emploi` | `180+ Projets accompagnés` | `12 Entreprises partenaires` | `85% Taux d'insertion`
+  - `250+ Bourses d'emploi` | `180+ Projets accompagnés` | `12 Entreprises partenaires` | `85% Taux d'insertion`
 
 **Section "Nos deux programmes" :**
 - 2 grandes cartes côte à côte avec icônes SVG custom :
@@ -91,7 +91,7 @@ La plateforme a **deux espaces distincts** :
 
 ---
 
-### PAGE 2 — Offres d'Emploi / Bourse Baarako (`/offres`)
+### PAGE 2 — Bourses d'Emploi / Bourse Baarako (`/offres`)
 
 **Layout :**
 - Header de section avec titre, description et compteur d'offres actives
@@ -122,7 +122,7 @@ La plateforme a **deux espaces distincts** :
 - Header avec nom entreprise + logo + localisation
 - Description complète avec sections : Missions / Profil recherché / Avantages
 - Sidebar sticky : résumé offre + bouton "Postuler maintenant" (CTA orange)
-- Section "Offres similaires"
+- Section "Bourses similaires"
 
 ---
 
@@ -194,7 +194,7 @@ La plateforme a **deux espaces distincts** :
 ```
 🏠  Dashboard
 👥  Utilisateurs
-💼  Offres d'Emploi
+💼 Bourses d'Emploi
 💡  Projets Entrepreneurs
 📚  Formations
 🏢  Entreprises
@@ -210,7 +210,7 @@ La plateforme a **deux espaces distincts** :
 ```
 ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
 │  👥 1 247    │ │  💼 89       │ │  💡 234      │ │  ✅ 312      │
-│  Utilisateurs│ │  Offres act. │ │  Projets     │ │  Insertions  │
+│ Utilisateurs│ │ Bourses act. │ │ Projets     │ │ Insertions  │
 │  +12% ↑     │ │  +5 ce mois  │ │  soumis      │ │  réussies    │
 └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘
 ```
@@ -238,7 +238,7 @@ La plateforme a **deux espaces distincts** :
 
 ---
 
-### ADMIN PAGE 3 — Gestion Offres d'Emploi (`/admin/offres`)
+### ADMIN PAGE 3 — Gestion Bourses d'Emploi (`/admin/offres`)
 
 - Table des offres avec colonnes : Titre | Entreprise | Lieu | Type | Candidatures | Statut | Date exp. | Actions
 - Bouton "Créer une offre" → Modal formulaire en 2 étapes

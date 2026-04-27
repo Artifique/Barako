@@ -1,1 +1,6 @@
-:3000/:1  
+Redesign this "Projets — Bourse Tchakèda" page with a stunning modern UI. Keep the same content and structure but make it visually striking:
+Background: Dark gradient background (#0D1117 to #1A1F2E) with animated floating geometric shapes — translucent hexagons, circles, and triangles in orange (#F97316) and green (#16A34A) with blur effects (backdrop-filter). Add a subtle animated grid or dot pattern overlay. Include glowing orbs/blobs with slow pulse animations using CSS keyframes.
+Project Card: Glassmorphism style card (background: rgba(255,255,255,0.05), backdrop-blur, border: 1px solid rgba(255,255,255,0.1), box-shadow with colored glow). On hover: lift effect (translateY -8px), glowing border in orange-to-green gradient, smooth transition 0.3s ease. Category badge ("Tertiaire") with gradient pill border. Status badge ("SOUMIS") as a glowing chip. Author avatar as a styled circle with gradient border. Tags ("Mentorat", "Financement") as neon-bordered pills. Add a subtle shimmer/shine animation sweeping across the card on hover.
+Typography: Large bold heading "Projets" with a gradient text (orange → green). Subtitle in soft white/grey.
+Animations: Floating shapes with keyframe animation (translateY up/down, rotate slow). Cards fade-in with staggered entrance (animation-delay). Hover interactions with scale and glow. Particle-like small dots drifting in background.
+Overall vibe: Afro-futuristic, startup-premium, dark mode, inspired by Linear.app and Vercel design language.

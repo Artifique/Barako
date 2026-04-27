@@ -10,6 +10,10 @@ export interface Formation {
   duration_days: number;
   location: string;
   max_places: number;
+  instructor_name: string | null;
+  instructor_bio: string | null;
+  level: string | null;
+  prerequisites: string | null;
   created_at: string;
   updated_at: string;
 }

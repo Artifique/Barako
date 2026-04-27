@@ -26,8 +26,8 @@ export function SiteFooter() {
         </div>
         {/* Navigation Links */}
         <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium">
-          <Link href="/offres" className="transition hover:text-yellowGold" style={{ color: 'white', '--hover-color': yellowGold } as React.CSSProperties}>
-            Offres
+          <Link href="/bourses" className="transition hover:text-yellowGold" style={{ color: 'white', '--hover-color': yellowGold } as React.CSSProperties}>
+            Bourses
           </Link>
           <Link href="/projets" className="transition hover:text-yellowGold" style={{ color: 'white', '--hover-color': yellowGold } as React.CSSProperties}>
             Projets

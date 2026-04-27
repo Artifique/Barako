@@ -42,7 +42,7 @@ export async function createJobOffer(
   supabase: SupabaseClient,
   input: JobOfferInsertInput
 ): Promise<ServiceResult<JobOfferWithCompany>> {
-  const { data, error } = await supabase.from("job_offers").insert(input).select(offerSelect).single();
+  const { data, error } = await supabase.from("job_offers").insert({ ...input, type_bourse: input.type_bourse ?? "regular" }).select(offerSelect).single();
   if (error) return fail(error.message);
   return ok(data as JobOfferWithCompany);
 }

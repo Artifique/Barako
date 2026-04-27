@@ -31,7 +31,7 @@ export async function createCompanyAsAdminAction(ownerId: string, input: Company
   const res = await CompanyService.createCompany(supabase, ownerId, input);
   if (res.ok) {
     revalidatePath("/admin/entreprises");
-    revalidatePath("/admin/offres");
+    revalidatePath("/admin/bourses");
   }
   return res;
 }

@@ -3,15 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HeroCarousel } from "@/components/layout/hero-carousel";
+import { getPublicStats } from "@/controllers/stats.controller";
 
-const stats = [
-  { label: "Offres d’emploi", value: "250+", hint: "Bourse Baarako" },
-  { label: "Projets accompagnés", value: "180+", hint: "Bourse Tchakèda" },
-  { label: "Entreprises partenaires", value: "12", hint: "Réseau" },
-  { label: "Taux d’insertion", value: "85%", hint: "Objectif" }
-];
+export default async function HomePage() {
+  const statsData = await getPublicStats();
+  
+  const stats = [
+    { label: "Bourses d’emploi", value: `${statsData.offersCount}+`, hint: "Bourse Baarako" },
+    { label: "Projets accompagnés", value: `${statsData.projectsCount}+`, hint: "Bourse Tchakèda" },
+    { label: "Entreprises partenaires", value: `${statsData.companiesCount}`, hint: "Réseau" },
+    { label: "Taux d’insertion", value: "85%", hint: "Objectif" }
+  ];
 
-export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-20 pt-8">
       <section className="mb-12">
@@ -65,10 +68,9 @@ export default function HomePage() {
           </ol>
         </Card>
         <Card glowing>
-          <h2 className="font-display text-xl font-bold text-slate-900">Prochaine étape</h2>
+          <h2 className="font-display text-xl font-bold text-slate-900">Rejoignez-nous</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">
-            Connectez Supabase (variables d’environnement), exécutez le script SQL dans le tableau de bord, puis parcourez
-            les offres et projets réels.
+            Commencez votre parcours professionnel aujourd'hui en créant votre espace personnalisé.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/auth/inscription">

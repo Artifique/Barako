@@ -29,7 +29,7 @@ export default async function AdminDashboardPage() {
           <p className="mt-2 font-display text-3xl font-bold text-primary">{s?.usersCount ?? "—"}</p>
         </Card>
         <Card glowing className="border-t-4 border-t-secondary">
-          <p className="text-sm font-medium text-slate-500">Offres actives</p>
+          <p className="text-sm font-medium text-slate-500">Bourses actives</p>
           <p className="mt-2 font-display text-3xl font-bold text-secondary">{s?.activeOffersCount ?? "—"}</p>
         </Card>
         <Card glowing className="border-t-4 border-t-teal-600">
@@ -52,7 +52,7 @@ export default async function AdminDashboardPage() {
         <Card glowing>
           <h2 className="font-display text-lg font-semibold text-slate-900">Activités récentes</h2>
           <ul className="mt-4 max-h-64 space-y-2 overflow-auto text-xs text-slate-600">
-            {acts.map((a) => (
+            {acts.map((a: any) => (
               <li key={a.id} className="rounded-lg border border-slate-100 bg-slate-50/80 px-3 py-2">
                 <span className="font-mono font-semibold text-primary">{a.action_type}</span> — {a.entity_type}{" "}
                 <span className="text-slate-400">{new Date(a.created_at).toLocaleString("fr-FR")}</span>

@@ -7,31 +7,18 @@ import { createJobOfferAction } from "@/controllers/job-offer.controller";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function JobOfferCreateForm({ companyId }: { companyId: string }) {
+export function JobOfferCreateForm({ companyId }: { companyId?: string | null }) {
   const router = useRouter();
   const [pending, start] = useTransition();
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    if (companyId) fd.append("company_id", companyId);
     start(async () => {
-      const res = await createJobOfferAction({
-        company_id: companyId,
-        title: String(fd.get("title") ?? "").trim(),
-        contract_type: String(fd.get("contract_type") ?? "CDI"),
-        location: String(fd.get("location") ?? "Bamako, Mali"),
-        description: String(fd.get("description") ?? "") || null,
-        missions: String(fd.get("missions") ?? "") || null,
-        requirements: String(fd.get("requirements") ?? "") || null,
-        benefits: String(fd.get("benefits") ?? "") || null,
-        sector: String(fd.get("sector") ?? "") || null,
-        salary_min: fd.get("salary_min") ? Number(fd.get("salary_min")) : null,
-        salary_max: fd.get("salary_max") ? Number(fd.get("salary_max")) : null,
-        expires_at: String(fd.get("expires_at") ?? "") || null,
-        status: (String(fd.get("status") ?? "draft") as "draft" | "published" | "closed")
-      });
+      const res = await createJobOfferAction(fd);
       if (res.ok) {
-        toast.success("Offre créée");
+        toast.success("Bourse créée");
         (e.target as HTMLFormElement).reset();
         router.refresh();
       } else toast.error(res.error);
@@ -56,6 +43,13 @@ export function JobOfferCreateForm({ companyId }: { companyId: string }) {
       <textarea name="missions" rows={2} placeholder="Missions" className="input-field" />
       <textarea name="requirements" rows={2} placeholder="Profil recherché" className="input-field" />
       <textarea name="benefits" rows={2} placeholder="Avantages" className="input-field" />
+      <label className="text-xs font-medium text-slate-600">Image de la bourse</label>
+      <input type="file" name="image" accept="image/*" className="input-field mt-1" />
+      <label className="text-xs font-medium text-slate-600">Type de bourse</label>
+      <select name="type_bourse" defaultValue="regular" className="input-field">
+        <option value="regular">Régulière</option>
+        <option value="tchakeda">Tchakèda</option>
+      </select>
       <label className="text-xs font-medium text-slate-600">Statut</label>
       <select name="status" defaultValue="draft" className="input-field">
         <option value="draft">Brouillon</option>

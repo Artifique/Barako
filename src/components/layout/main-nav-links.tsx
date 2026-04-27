@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 
 const mainLinks = [
-  { href: "/offres", label: "Offres", match: (p: string) => p === "/offres" || p.startsWith("/offres/") },
+  { href: "/bourses", label: "Bourses", match: (p: string) => p === "/bourses" || p.startsWith("/bourses/") },
   { href: "/projets", label: "Projets", match: (p: string) => p === "/projets" || p.startsWith("/projets/") },
   { href: "/formations", label: "Formations", match: (p: string) => p === "/formations" || p.startsWith("/formations/") }
 ];

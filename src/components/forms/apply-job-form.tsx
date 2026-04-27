@@ -38,7 +38,7 @@ export function ApplyJobForm({
     return (
       <div className="mt-6">
         <p className="text-sm text-slate-600">Connecte-toi pour postuler.</p>
-        <Link href={`/auth/connexion?next=/offres/${jobOfferId}`}>
+        <Link href={`/auth/connexion?next=/bourses/${jobOfferId}`}>
           <Button className="mt-3 w-full">Connexion</Button>
         </Link>
       </div>

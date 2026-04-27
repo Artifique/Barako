@@ -9,6 +9,10 @@ export interface JobApplication {
   cv_url: string | null;
   created_at: string;
   updated_at: string;
+
+  // Champs spécifiques à la bourse Tchakèda
+  has_activity_idea?: boolean;
+  has_exercised_before?: boolean;
 }
 
 export interface JobApplicationWithOffer extends JobApplication {
@@ -23,4 +27,9 @@ export interface JobApplicationInsertInput {
   job_offer_id: string;
   cover_letter?: string | null;
   cv_url?: string | null;
+}
+
+export interface TchakedaApplicationInput {
+  has_activity_idea: boolean;
+  has_exercised_before: boolean;
 }

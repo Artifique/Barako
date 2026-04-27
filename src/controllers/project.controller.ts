@@ -30,6 +30,11 @@ export async function createProjectAction(input: ProjectInsertInput) {
   return res;
 }
 
+export async function listProjectsAdminAction() {
+  const supabase = await createClient();
+  return ProjectService.listProjectsForAdmin(supabase);
+}
+
 export async function updateProjectStatusAction(projectId: string, status: ProjectStatus) {
   const supabase = await createClient();
   const res = await ProjectService.updateProjectStatus(supabase, projectId, status);
@@ -38,7 +43,21 @@ export async function updateProjectStatusAction(projectId: string, status: Proje
   return res;
 }
 
-export async function listProjectsAdminAction() {
+export async function updateProjectAdminAction(projectId: string, input: Partial<ProjectInsertInput>) {
   const supabase = await createClient();
-  return ProjectService.listProjectsForAdmin(supabase);
+  const res = await ProjectService.updateProject(supabase, projectId, input);
+  if (res.ok) {
+    revalidatePath("/admin/projets");
+  }
+  return res;
 }
+
+export async function deleteProjectAdminAction(projectId: string) {
+  const supabase = await createClient();
+  const res = await ProjectService.deleteProject(supabase, projectId);
+  if (res.ok) {
+    revalidatePath("/admin/projets");
+  }
+  return res;
+}
+

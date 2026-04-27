@@ -2,7 +2,7 @@ import type { JobOfferStatus } from "./enums";
 
 export interface JobOffer {
   id: string;
-  company_id: string;
+  company_id: string | null;
   title: string;
   description: string | null;
   missions: string | null;
@@ -16,6 +16,8 @@ export interface JobOffer {
   currency: string;
   expires_at: string | null;
   status: JobOfferStatus;
+  type_bourse: "regular" | "tchakeda";
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -27,10 +29,11 @@ export interface JobOfferWithCompany extends JobOffer {
     logo_url: string | null;
     location: string | null;
   } | null;
+  applications_count?: number;
 }
 
 export interface JobOfferInsertInput {
-  company_id: string;
+  company_id?: string | null;
   title: string;
   description?: string | null;
   missions?: string | null;
@@ -44,6 +47,8 @@ export interface JobOfferInsertInput {
   currency?: string;
   expires_at?: string | null;
   status?: JobOfferStatus;
+  type_bourse?: "regular" | "tchakeda";
+  image_url?: string | null;
 }
 
 export interface JobOfferFilters {

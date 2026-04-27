@@ -24,7 +24,7 @@ const slides: Slide[] = [
     title: "Des opportunités",
     highlight: "qui vous ressemblent",
     subtitle: "Parcourez des offres vérifiées, postulez en quelques clics et suivez vos candidatures au même endroit.",
-    href: "/offres",
+    href: "/bourses",
     cta: "Explorer les offres",
     imageSrc: "/im1.jpeg", // Assuming .jpg extension, adjust if needed
   },

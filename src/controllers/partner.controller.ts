@@ -11,7 +11,21 @@ export async function createPartnerAdminAction(input: {
   display_order?: number;
 }) {
   const supabase = await createClient();
-  const res = await PartnerService.insertPartner(supabase, input);
+  const res = await PartnerService.createPartner(supabase, input);
+  if (res.ok) revalidatePath("/admin/partenaires");
+  return res;
+}
+
+export async function updatePartnerAdminAction(id: string, input: any) {
+  const supabase = await createClient();
+  const res = await PartnerService.updatePartner(supabase, id, input);
+  if (res.ok) revalidatePath("/admin/partenaires");
+  return res;
+}
+
+export async function deletePartnerAdminAction(id: string) {
+  const supabase = await createClient();
+  const res = await PartnerService.deletePartner(supabase, id);
   if (res.ok) revalidatePath("/admin/partenaires");
   return res;
 }
