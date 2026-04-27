@@ -78,15 +78,15 @@ export function PublicNav({ user }: { user: User | null }) {
           <nav className="flex flex-col items-center gap-6 pt-10">
             <MainNavLinks onCloseMobileMenu={closeMobileMenu} />
             {user ? (
-              <form action={signOut} className="w-full">
+              <form action={signOut} className="w-full" onSubmit={closeMobileMenu}>
                 <Button type="submit" variant="ghost" className="w-full">Déconnexion</Button>
               </form>
             ) : (
               <>
-                <Link href="/auth/connexion" className="w-full">
+                <Link href="/auth/connexion" className="w-full" onClick={closeMobileMenu}>
                   <Button variant="ghost" className="w-full">Connexion</Button>
                 </Link>
-                <Link href="/auth/inscription" className="w-full">
+                <Link href="/auth/inscription" className="w-full" onClick={closeMobileMenu}>
                   <Button className="w-full bg-primary text-white">Inscription</Button>
                 </Link>
               </>
