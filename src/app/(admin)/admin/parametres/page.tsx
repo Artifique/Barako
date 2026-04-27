@@ -1,19 +1,18 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { Card } from "@/components/ui/card";
+import { AdminAvantagesPanel } from "@/components/admin/admin-avantages-panel";
+import { listAvantagesAction } from "@/controllers/avantage.controller";
 
-export default function AdminParametresPage() {
+export default async function AdminParametresPage() {
+  const res = await listAvantagesAction();
+  const avantages = res.ok ? res.data : [];
+
   return (
     <div className="space-y-6 text-slate-900">
       <AdminPageHeader
         title="Paramètres"
-        subtitle="Configuration avancée de la plateforme (extensions prévues)."
+        subtitle="Configuration avancée de la plateforme."
       />
-      <Card glowing className="max-w-2xl border-slate-200/90 bg-white shadow-md shadow-slate-200/25">
-        <p className="text-sm leading-relaxed text-slate-700">
-          Cette section accueillera les réglages globaux (e-mails transactionnels, textes légaux, limites d’inscription,
-          etc.). Pour l’instant : variables d’environnement Next.js et projet Supabase.
-        </p>
-      </Card>
+      <AdminAvantagesPanel avantages={avantages} />
     </div>
   );
 }
