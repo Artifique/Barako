@@ -15,30 +15,30 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
 
-function PartnerFields({ partner }: { partner?: Partner }) {
+function SponsorFields({ sponsor }: { sponsor?: Partner }) {
   return (
     <div className="grid gap-4">
       <div>
         <label className="text-xs font-semibold text-slate-700">Nom</label>
-        <input name="name" required className="input-field mt-1 w-full" defaultValue={partner?.name ?? ""} />
+        <input name="name" required className="input-field mt-1 w-full" defaultValue={sponsor?.name ?? ""} />
       </div>
       <div>
         <label className="text-xs font-semibold text-slate-700">Logo (URL)</label>
-        <input name="logo_url" className="input-field mt-1 w-full" defaultValue={partner?.logo_url ?? ""} />
+        <input name="logo_url" className="input-field mt-1 w-full" defaultValue={sponsor?.logo_url ?? ""} />
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-700">Site Web</label>
-        <input name="website" className="input-field mt-1 w-full" defaultValue={partner?.website ?? ""} />
+        <label className="text-xs font-semibold text-slate-700">Contact (Email/Téléphone)</label>
+        <input name="website" className="input-field mt-1 w-full" defaultValue={sponsor?.website ?? ""} />
       </div>
       <div>
         <label className="text-xs font-semibold text-slate-700">Ordre d'affichage</label>
-        <input name="display_order" type="number" className="input-field mt-1 w-full" defaultValue={partner?.display_order ?? 0} />
+        <input name="display_order" type="number" className="input-field mt-1 w-full" defaultValue={sponsor?.display_order ?? 0} />
       </div>
     </div>
   );
 }
 
-export function AdminPartenairesPanel({ partners }: { partners: Partner[] }) {
+export function AdminSponsorsPanel({ sponsors }: { sponsors: Partner[] }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [createOpen, setCreateOpen] = useState(false);
@@ -55,7 +55,7 @@ export function AdminPartenairesPanel({ partners }: { partners: Partner[] }) {
     startTransition(async () => {
       const res = id ? await updatePartnerAdminAction(id, input) : await createPartnerAdminAction(input);
       if (res.ok) {
-        toast.success(id ? "Partenaire mis à jour" : "Partenaire créé");
+        toast.success(id ? "Sponsor mis à jour" : "Sponsor créé");
         setCreateOpen(false); setEdit(null); router.refresh();
       } else toast.error(res.error);
     });
@@ -66,27 +66,27 @@ export function AdminPartenairesPanel({ partners }: { partners: Partner[] }) {
     startTransition(async () => {
       const res = await deletePartnerAdminAction(del.id);
       if (res.ok) {
-        toast.success("Partenaire supprimé"); setDel(null); router.refresh();
+        toast.success("Sponsor supprimé"); setDel(null); router.refresh();
       } else toast.error(res.error);
     });
   };
 
   return (
     <div className="space-y-6">
-      <AdminPageHeader title="Partenaires" subtitle="Gestion des partenaires de Baarako." />
-      <Button onClick={() => setCreateOpen(true)}>Nouveau partenaire</Button>
+      <AdminPageHeader title="Sponsors" subtitle="Gestion des sponsors de Baarako." />
+      <Button onClick={() => setCreateOpen(true)}>Nouveau sponsor</Button>
       <Card className="p-0 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 uppercase text-xs">
             <tr>
               <th className="p-3">Nom</th>
-              <th className="p-3">Site Web</th>
+              <th className="p-3">Contact</th>
               <th className="p-3 text-center">Ordre</th>
               <th className="p-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {partners.map((p) => (
+            {sponsors.map((p) => (
               <tr key={p.id} className="border-t">
                 <td className="p-3 font-medium">{p.name}</td>
                 <td className="p-3 text-xs text-slate-500">{p.website || "—"}</td>
@@ -100,9 +100,9 @@ export function AdminPartenairesPanel({ partners }: { partners: Partner[] }) {
           </tbody>
         </table>
       </Card>
-      <AdminModal open={createOpen} onOpenChange={setCreateOpen} title="Ajout" footer={<Button type="submit" form="p-add">Créer</Button>}><form id="p-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><PartnerFields /></form></AdminModal>
-      <AdminModal open={!!edit} onOpenChange={(o) => !o && setEdit(null)} title="Modifier" footer={<Button type="submit" form="p-edit">Enregistrer</Button>}><form id="p-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><PartnerFields partner={edit ?? undefined} /></form></AdminModal>
-      <ConfirmDeleteModal open={!!del} onOpenChange={(o) => !o && setDel(null)} onConfirm={onDelete} pending={isPending} title="Supprimer partenaire ?" />
+      <AdminModal open={createOpen} onOpenChange={setCreateOpen} title="Ajout" footer={<Button type="submit" form="p-add">Créer</Button>}><form id="p-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><SponsorFields /></form></AdminModal>
+      <AdminModal open={!!edit} onOpenChange={(o) => !o && setEdit(null)} title="Modifier" footer={<Button type="submit" form="p-edit">Enregistrer</Button>}><form id="p-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><SponsorFields sponsor={edit ?? undefined} /></form></AdminModal>
+      <ConfirmDeleteModal open={!!del} onOpenChange={(o) => !o && setDel(null)} onConfirm={onDelete} pending={isPending} title="Supprimer sponsor ?" />
     </div>
   );
 }

@@ -35,3 +35,12 @@ export async function createCompanyAsAdminAction(ownerId: string, input: Company
   }
   return res;
 }
+
+export async function updateCompanyAsAdminAction(id: string, input: CompanyInsertInput) {
+  const supabase = await createClient();
+  const res = await CompanyService.updateCompany(supabase, id, input);
+  if (res.ok) {
+    revalidatePath("/admin/entreprises");
+  }
+  return res;
+}

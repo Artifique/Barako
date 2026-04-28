@@ -17,27 +17,27 @@ const navSections: { title: string; items: { href: string; label: string; icon: 
     ]
   },
   {
-    title: "Contenus",
-    items: [
-      { href: "/admin/bourses", label: "Bourses d’emploi", icon: "◆" },
-      { href: "/admin/entreprises", label: "Entreprises", icon: "⌂" },
-      { href: "/admin/projets", label: "Projets", icon: "◇" },
-      { href: "/admin/formations", label: "Formations", icon: "◈" },
-      { href: "/admin/partenaires", label: "Partenaires", icon: "⚬" }
-    ]
+  title: "Contenus",
+  items: [
+    { href: "/admin/avantages", label: "Avantages", icon: "★" },
+    { href: "/admin/bourses", label: "Bourses d’emploi", icon: "◆" },
+    { href: "/admin/entreprises", label: "Entreprises", icon: "⌂" },
+    { href: "/admin/projets", label: "Projets", icon: "◇" },
+    { href: "/admin/formations", label: "Formations", icon: "◈" },
+    { href: "/admin/sponsors", label: "Sponsors", icon: "⚬" }
+  ]
   },
   {
-    title: "Communauté",
-    items: [{ href: "/admin/utilisateurs", label: "Utilisateurs", icon: "◐" }]
+  title: "Communauté",
+  items: [{ href: "/admin/utilisateurs", label: "Utilisateurs", icon: "◐" }]
   },
   {
-    title: "Système",
-    items: [
-      { href: "/admin/activite", label: "Journal d’activité", icon: "⊞" },
-      { href: "/admin/parametres", label: "Paramètres", icon: "⚙" }
-    ]
-  }
-];
+  title: "Système",
+  items: [
+    { href: "/admin/activite", label: "Journal d’activité", icon: "⊞" },
+    { href: "/admin/parametres", label: "Paramètres", icon: "⚙" }
+  ]
+  }];
 
 function NavLink({
   href,

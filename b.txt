@@ -1,20 +1,16 @@
-app-index.js:33 Warning: Extra attributes from the server: __processed_5bfef3df-79fb-4922-af08-58849309a1e2__,bis_register
-    at body
-    at html
-    at RootLayout (Server)
-    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:74:9)
-    at RedirectBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:82:11)
-    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)
-    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)
-    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)
-    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)
-    at HotReload (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)
-    at Router (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:207:11)
-    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:113:9)
-    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:160:11)
-    at AppRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:585:13)
-    at ServerRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:112:27)
-    at Root (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:117:11)
 
-﻿
-xplanationUnderstanding the problemThis is a React Hydration Mismatch warning. It occurs because the HTML generated on the server does not match the HTML React finds in the browser during the "hydration" process.In this specific case, the attributes bis_register and __processed_... are being injected into your <body> or <html> tags by a browser extension, most likely Bitwarden (a password manager). Because the extension modifies the DOM before React has a chance to initialize, React notices these "extra" attributes that weren't present in the server-rendered version and warns you about the inconsistency.How to verifyCheck Extensions: Disable the Bitwarden extension (or other password managers) and reload the page. The error should disappear.Incognito Mode: Open your application in an Incognito/Private window where extensions are disabled.Inspect DOM: Open DevTools, go to the Elements tab, and look at the <body> or <html> tags. You will see these attributes physically present in the code.Suggested fixSince you cannot control what extensions users have installed, you should tell React to ignore hydration mismatches for the specific elements being modified (usually <html> or <body>). In your Next.js root layout file (typically app/layout.tsx or app/layout.js), add the suppressHydrationWarning attribute. This attribute only goes one level deep, so it is commonly added to the <html> tag.js// app/layout.js or app/layout.tsxexport default function RootLayout({ children }) {  return (    // suppressHydrationWarning prevents errors from browser extensions     // (like Bitwarden) that inject attributes into the html or body tags.    <html lang="en" suppressHydrationWarning>      <body>{children}</body>    </html>  );}Use code snippets with cautionSummaryCause: The Bitwarden browser extension is injecting tracking attributes into your HTML before React finishes loading.Fix: Add the suppressHydrationWarning prop to your <html> tag in your root layout.Impact: This suppresses the warning without affecting your app's performance or SEO.Data used to understand this messageConsole messageStacktraceRelated codeUse search insteadAI tools may generate inaccurate info that doesn't represent Google's views. Data sent to Google may be seen by human reviewers to impro
+FICHE ENTREPRISE PARTENAIRE
+A. IDENTITÉ DE L’ENTREPRISE
+Nom de l’entreprise : ____________________________________________
+Secteur d’activité : ____________________________________________
+Adresse : ____________________________________________
+Téléphone : ____________________________________________
+Email : ____________________________________________
+B. RESPONSABLE
+Nom & prénom : ____________________________________________
+Fonction : ____________________________________________
+Téléphone : ____________________________________________
+C. TYPE D’ENTREPRISE
+■ Très petite entreprise (1–5 employés)
+■ PME (5–50 employés)
+■ Grande entreprise
