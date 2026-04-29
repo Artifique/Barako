@@ -35,16 +35,3 @@ export async function deleteUserAdminAction(id: string) {
   revalidatePath("/admin/utilisateurs");
   return { ok: true as const };
 }
-
-export async function createUserAdminAction(input: any) {
-  const supabase = await createClient();
-  const { error } = await supabase.auth.admin.createUser({
-    email: input.email,
-    password: input.password,
-    user_metadata: { full_name: input.full_name, role: input.role },
-    email_confirm: true
-  });
-  if (error) return { ok: false as const, error: error.message };
-  revalidatePath("/admin/utilisateurs");
-  return { ok: true as const };
-}

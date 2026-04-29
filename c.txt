@@ -1,7 +1,24 @@
- Compiled / in 3.7s (758 modules)
- GET / 200 in 5962ms
- ○ Compiling /auth/inscription ...
- ✓ Compiled /auth/inscription in 1322ms (771 modules)
- GET / 200 in 1565ms
-Erreur lors de la mise à jour du profil : Could not find the 'phone' column of 'profiles' in the schema cache
- POST /auth/inscription 200 in 1430ms
+D. BESOINS EN RECRUTEMENT
+Poste Nombre Niveau requis
+E. PROFIL RECHERCHÉ
+Niveau d’étude : ____________________________________________
+Expérience souhaitée : ____________________________________________
+Compétences clés : ____________________________________________
+F. CONDITIONS DE TRAVAIL
+■ Stage
+■ CDD
+■ CDI
+■ Journalier
+Salaire : ____________________________________________
+Lieu de travail : ____________________________________________
+G. SERVICES SOUHAITÉS
+■ Recrutement simple
+■ Pré-sélection complète
+■ Formation des candidats
+■ Suivi des employés
+H. BOURSE TCHAKÈDA
+■ Collaborer avec jeunes entrepreneur
+■ Externaliser services
+I. ENGAGEMENT DE L’ENTREPRISE
+Nom : ____________________________________________
+Signature & cachet : ____________________________________________

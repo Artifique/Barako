@@ -4,12 +4,14 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { createAvantageAction, deleteAvantageAction, updateAvantageAction } from "@/controllers/avantage.controller";
-import type { Avantage } from "@/services/avantage.service";
+import type { Avantage } from "@/models/avantage";
 import { AdminModal } from "@/components/admin/admin-modal";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
+import { uploadFileToSupabase } from "@/lib/utils/supabase-upload";
+import { createClient } from "@/lib/supabase/client";
 
 function AvantageFields({ avantage }: { avantage?: Avantage }) {
   return (
@@ -20,15 +22,12 @@ function AvantageFields({ avantage }: { avantage?: Avantage }) {
       </div>
       <div>
         <label className="text-xs font-semibold text-slate-700">Description</label>
-        <textarea name="description" required rows={2} className="input-field mt-1 w-full" defaultValue={avantage?.description ?? ""} />
+        <textarea name="description" required rows={3} className="input-field mt-1 w-full" defaultValue={avantage?.description ?? ""} />
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-700">Icône (ex: "star")</label>
-        <input name="icon" className="input-field mt-1 w-full" defaultValue={avantage?.icon ?? ""} />
-      </div>
-      <div>
-        <label className="text-xs font-semibold text-slate-700">Ordre</label>
-        <input name="display_order" type="number" className="input-field mt-1 w-full" defaultValue={avantage?.display_order ?? 0} />
+        <label className="text-xs font-semibold text-slate-700">Image</label>
+        <input type="file" name="image" accept="image/*" className="mt-1 w-full" />
+        {avantage?.image_url && <img src={avantage.image_url} alt="Aperçu" className="mt-2 h-20" />}
       </div>
     </div>
   );
@@ -40,14 +39,24 @@ export function AdminAvantagesPanel({ avantages }: { avantages: Avantage[] }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Avantage | null>(null);
   const [del, setDel] = useState<Avantage | null>(null);
+  const supabase = createClient();
 
   const onSubmit = async (fd: FormData, id?: string) => {
+    const file = fd.get("image") as File;
+    let image_url = id ? edit?.image_url : null;
+
+    if (file && file.size > 0) {
+      const uploadRes = await uploadFileToSupabase(supabase, "bourse-images", file);
+      if (!uploadRes.ok) return toast.error("Erreur upload image");
+      image_url = uploadRes.data?.url || null;
+    }
+
     const input = {
       title: String(fd.get("title")),
       description: String(fd.get("description")),
-      icon: String(fd.get("icon") || ""),
-      display_order: Number(fd.get("display_order") || 0),
+      image_url: image_url || undefined,
     };
+
     startTransition(async () => {
       const res = id ? await updateAvantageAction(id, input) : await createAvantageAction(input);
       if (res.ok) {
@@ -56,6 +65,7 @@ export function AdminAvantagesPanel({ avantages }: { avantages: Avantage[] }) {
       } else toast.error(res.error);
     });
   };
+
 
   const onDelete = () => {
     if (!del) return;
@@ -74,12 +84,25 @@ export function AdminAvantagesPanel({ avantages }: { avantages: Avantage[] }) {
       <Card className="p-0 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 uppercase text-xs">
-            <tr><th className="p-3">Titre</th><th className="p-3 text-right">Actions</th></tr>
+            <tr>
+              <th className="p-3 text-left">Image</th>
+              <th className="p-3 text-left">Titre</th>
+              <th className="p-3 text-left">Description</th>
+              <th className="p-3 text-right">Actions</th>
+            </tr>
           </thead>
           <tbody>
             {avantages.map((a) => (
               <tr key={a.id} className="border-t">
+                <td className="p-3">
+                  {a.image_url ? (
+                    <img src={a.image_url} alt={a.title} className="h-10 w-10 object-cover rounded" />
+                  ) : (
+                    <div className="h-10 w-10 bg-slate-100 rounded" />
+                  )}
+                </td>
                 <td className="p-3 font-medium">{a.title}</td>
+                <td className="p-3 text-slate-600 truncate max-w-[200px]">{a.description}</td>
                 <td className="p-3 text-right">
                   <Button variant="ghost" onClick={() => setEdit(a)}>✏️</Button>
                   <Button variant="ghost" onClick={() => setDel(a)}>🗑️</Button>

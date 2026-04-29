@@ -6,22 +6,22 @@ export async function listPartners(supabase: SupabaseClient): Promise<ServiceRes
   const { data, error } = await supabase
     .from("partners")
     .select("*")
-    .order("display_order", { ascending: true });
+    .order("created_at", { ascending: false });
   if (error) return fail(error.message);
   return ok((data ?? []) as Partner[]);
 }
 
 export async function createPartner(
   supabase: SupabaseClient,
-  input: { name: string; description?: string | null; website?: string | null; display_order?: number }
+  input: { name: string; description?: string | null; website?: string | null; logo_url?: string }
 ): Promise<ServiceResult<Partner>> {
   const { data, error } = await supabase
     .from("partners")
     .insert({
       name: input.name,
+      logo_url: input.logo_url ?? null,
       description: input.description ?? null,
       website: input.website ?? null,
-      display_order: input.display_order ?? 0
     })
     .select("*")
     .single();
@@ -32,15 +32,15 @@ export async function createPartner(
 export async function updatePartner(
   supabase: SupabaseClient,
   id: string,
-  input: { name: string; description?: string | null; website?: string | null; display_order?: number }
+  input: { name: string; description?: string | null; website?: string | null; logo_url?: string }
 ): Promise<ServiceResult<Partner>> {
   const { data, error } = await supabase
     .from("partners")
     .update({
       name: input.name,
+      logo_url: input.logo_url ?? null,
       description: input.description ?? null,
       website: input.website ?? null,
-      display_order: input.display_order ?? 0
     })
     .eq("id", id)
     .select("*")

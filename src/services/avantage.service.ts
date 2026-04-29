@@ -5,8 +5,9 @@ export interface Avantage {
   id: string;
   title: string;
   description: string;
-  icon: string | null;
-  display_order: number;
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export async function listAvantages(supabase: SupabaseClient): Promise<ServiceResult<Avantage[]>> {
@@ -17,7 +18,7 @@ export async function listAvantages(supabase: SupabaseClient): Promise<ServiceRe
 
 export async function createAvantage(
   supabase: SupabaseClient,
-  input: { title: string; description: string; icon?: string; display_order?: number }
+  input: { title: string; description: string; image_url?: string; display_order?: number }
 ): Promise<ServiceResult<Avantage>> {
   const { data, error } = await supabase.from("avantages").insert(input).select("*").single();
   if (error) return fail(error.message);
@@ -27,14 +28,14 @@ export async function createAvantage(
 export async function updateAvantage(
   supabase: SupabaseClient,
   id: string,
-  input: { title: string; description: string; icon?: string; display_order?: number }
+  input: { title: string; description: string; image_url?: string; display_order?: number }
 ): Promise<ServiceResult<Avantage>> {
   const { data, error } = await supabase
     .from("avantages")
     .update({
       title: input.title,
       description: input.description,
-      icon: input.icon ?? null,
+      image_url: input.image_url ?? null,
       display_order: input.display_order ?? 0
     })
     .eq("id", id)

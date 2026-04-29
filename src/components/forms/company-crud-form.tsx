@@ -6,16 +6,15 @@ import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Company, CompanyInsertInput } from "@/models/company";
+import { Company } from "@/models/company";
 import { ServiceResult } from "@/models/service-result";
 import { Profile } from "@/models/profile";
 
-import { createCompanyAsAdminAction, updateCompanyAsAdminAction } from "@/controllers/company.controller";
+import { createCompanyAction, updateCompanyAsAdminAction } from "@/controllers/company.controller";
 
 type CompanyCrudFormProps = {
   initialCompany?: Company;
-  companyOwners: Profile[]; // Liste des utilisateurs avec le rôle "company"
+  companyOwners: Profile[];
   onSubmitSuccess?: () => void;
 };
 
@@ -31,7 +30,6 @@ const SubmitButton = ({ isEditMode }: { isEditMode: boolean }) => {
 export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess }: CompanyCrudFormProps) {
   const isEditMode = !!initialCompany;
 
-  const [ownerId, setOwnerId] = useState("");
   const [name, setName] = useState(initialCompany?.name || "");
   const [sector, setSector] = useState(initialCompany?.sector || "");
   const [email, setEmail] = useState(initialCompany?.email || "");
@@ -39,6 +37,18 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
   const [responsibleFunction, setResponsibleFunction] = useState(initialCompany?.responsible_function || "");
   const [responsiblePhone, setResponsiblePhone] = useState(initialCompany?.responsible_phone || "");
   const [companyType, setCompanyType] = useState(initialCompany?.company_type || "");
+
+  useEffect(() => {
+    if (initialCompany) {
+      setName(initialCompany.name || "");
+      setSector(initialCompany.sector || "");
+      setEmail(initialCompany.email || "");
+      setResponsibleName(initialCompany.responsible_name || "");
+      setResponsibleFunction(initialCompany.responsible_function || "");
+      setResponsiblePhone(initialCompany.responsible_phone || "");
+      setCompanyType(initialCompany.company_type || "");
+    }
+  }, [initialCompany]);
 
   const formSubmitAction = async (prevState: ServiceResult<Company | null>, formData: FormData): Promise<ServiceResult<Company | null>> => {
     const companyInput = {
@@ -54,10 +64,7 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
     if (isEditMode && initialCompany) {
       return updateCompanyAsAdminAction(initialCompany.id, companyInput);
     } else {
-      if (!ownerId) {
-        return { ok: false, error: "Le propriétaire est requis pour la création." };
-      }
-      return createCompanyAsAdminAction(ownerId, companyInput);
+      return createCompanyAction(companyInput);
     }
   };
 
@@ -71,9 +78,7 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
       toast.success(`Entreprise ${isEditMode ? "mise à jour" : "créée"} avec succès !`);
       onSubmitSuccess?.();
       if (!isEditMode) {
-        // Réinitialiser le formulaire pour la création
         setName("");
-        setOwnerId("");
         setSector("");
         setEmail("");
         setResponsibleName("");
@@ -88,25 +93,6 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
 
   return (
     <form action={formAction} className="space-y-4">
-      <div>
-        <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">Compte propriétaire</label>
-        <select
-          id="owner_id"
-          name="owner_id"
-          value={ownerId}
-          onChange={(e) => setOwnerId(e.target.value)}
-          required
-          className="input-field mt-1 block w-full"
-        >
-          <option value="">— Choisir —</option>
-          {companyOwners.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.full_name ?? p.email} ({p.email})
-            </option>
-          ))}
-        </select>
-      </div>
-
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nom de l'entreprise</label>
         <Input

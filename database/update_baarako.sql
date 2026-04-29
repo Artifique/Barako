@@ -12,3 +12,5 @@ ADD COLUMN IF NOT EXISTS company_type text;
 -- Pour plus de flexibilité, on ajoute une colonne dédiée ou on met à jour le JSONB.
 -- Ajoutons une colonne 'maintenance_mode' à la table settings pour simplifier.
 ALTER TABLE public.settings ADD COLUMN IF NOT EXISTS maintenance_mode boolean DEFAULT false;
+ALTER TABLE public.avantages RENAME COLUMN icon TO image_url;
+ALTER TABLE public.partners DROP COLUMN display_order;

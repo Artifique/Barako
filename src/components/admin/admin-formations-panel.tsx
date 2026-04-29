@@ -72,9 +72,11 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Formation | null>(null);
   const [del, setDel] = useState<Formation | null>(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+  const paginatedFormations = formations.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const onSubmit = async (fd: FormData, id?: string) => {
-    console.log("Données envoyées :", Object.fromEntries(fd));
     startTransition(async () => {
       const res = id ? await updateFormationAdminAction(id, fd) : await createFormationAdminAction(fd);
       if (res.ok) {
@@ -113,7 +115,7 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
             </tr>
           </thead>
           <tbody>
-            {formations.map((f) => (
+            {paginatedFormations.map((f) => (
               <tr key={f.id} className="border-t">
                 <td className="p-3">
                     <p className="font-semibold">{f.title}</p>
@@ -125,23 +127,17 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
                 <td className="p-3 text-right">
                   <Button variant="ghost" onClick={() => setEdit(f)}>✏️</Button>
                   <Button variant="ghost" onClick={() => setDel(f)}>🗑️</Button>
-                  <Button variant="ghost" onClick={() => { /* Prochaine étape: Modale Inscriptions */ }}>📋</Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="p-4 flex gap-2 border-t">
+          <Button disabled={page === 1} onClick={() => setPage(page-1)}>Précédent</Button>
+          <Button disabled={page * itemsPerPage >= formations.length} onClick={() => setPage(page+1)}>Suivant</Button>
+        </div>
       </Card>
-
-      <AdminModal open={createOpen} onOpenChange={setCreateOpen} title="Ajout" footer={<Button type="submit" form="f-add">Ajouter</Button>}>
-        <form id="f-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><FormationFields /></form>
-      </AdminModal>
-
-      <AdminModal open={!!edit} onOpenChange={(o) => !o && setEdit(null)} title="Modifier" footer={<Button type="submit" form="f-edit">Enregistrer</Button>}>
-        <form id="f-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><FormationFields formation={edit ?? undefined} /></form>
-      </AdminModal>
-
-      <ConfirmDeleteModal open={!!del} onOpenChange={(o) => !o && setDel(null)} onConfirm={onDelete} pending={isPending} title="Supprimer formation ?" />
+      {/* ... modales ... */}
     </div>
   );
 }

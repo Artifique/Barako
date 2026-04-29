@@ -1,25 +1,33 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ActivityLog } from "@/models";
-import { fail, ok, type ServiceResult } from "@/models/service-result";
+import { createClient } from "@/lib/supabase/server";
+import { ok, fail } from "@/models/service-result";
 
 export async function logActivity(
-  supabase: SupabaseClient,
-  entry: Omit<ActivityLog, "id" | "created_at">
-): Promise<ServiceResult<void>> {
-  const { error } = await supabase.from("activity_logs").insert(entry);
-  if (error) return fail(error.message);
-  return ok(undefined);
+  actionType: string,
+  entityType: string,
+  entityId: string | null = null,
+  metadata: Record<string, unknown> | null = null
+) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  await supabase.from("activity_logs").insert({
+    actor_id: user?.id,
+    action_type: actionType,
+    entity_type: entityType,
+    entity_id: entityId,
+    metadata,
+  });
 }
 
-export async function listRecentActivities(
-  supabase: SupabaseClient,
-  limit = 20
-): Promise<ServiceResult<ActivityLog[]>> {
+export async function listRecentActivities(supabase: any, limit: number = 50) {
   const { data, error } = await supabase
     .from("activity_logs")
-    .select("*")
+    .select("*, actor:profiles(full_name)")
     .order("created_at", { ascending: false })
     .limit(limit);
+
   if (error) return fail(error.message);
-  return ok((data ?? []) as ActivityLog[]);
+  return ok(data);
 }

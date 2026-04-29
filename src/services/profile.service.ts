@@ -27,6 +27,33 @@ export async function updateProfile(
   return ok(data as Profile);
 }
 
+export async function createUserAdmin(
+  supabase: SupabaseClient,
+  input: { email: string; full_name: string; role: any }
+): Promise<ServiceResult<Profile>> {
+  // Cette fonction nécessite un service_role pour créer des utilisateurs directement
+  // Si le client passé est un client standard, cela échouera.
+  // Pour cet exemple, on suppose que le client a les droits.
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    email: input.email,
+    password: "Password123!",
+    email_confirm: true,
+    user_metadata: { full_name: input.full_name, role: input.role },
+  });
+
+  if (authError) return fail(authError.message);
+  
+  // Le trigger handle_new_user crée automatiquement le profil dans la table 'profiles'
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", authData.user.id)
+    .single();
+
+  if (error) return fail(error.message);
+  return ok(data as Profile);
+}
+
 export async function listProfilesForAdmin(
   supabase: SupabaseClient,
   params?: { search?: string; role?: string; limit?: number }

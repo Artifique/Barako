@@ -8,24 +8,24 @@ export async function createPartnerAdminAction(input: {
   name: string;
   description?: string | null;
   website?: string | null;
-  display_order?: number;
+  logo_url?: string;
 }) {
   const supabase = await createClient();
   const res = await PartnerService.createPartner(supabase, input);
-  if (res.ok) revalidatePath("/admin/partenaires");
+  if (res.ok) revalidatePath("/admin/sponsors");
   return res;
 }
 
 export async function updatePartnerAdminAction(id: string, input: any) {
   const supabase = await createClient();
   const res = await PartnerService.updatePartner(supabase, id, input);
-  if (res.ok) revalidatePath("/admin/partenaires");
+  if (res.ok) revalidatePath("/admin/sponsors");
   return res;
 }
 
 export async function deletePartnerAdminAction(id: string) {
   const supabase = await createClient();
   const res = await PartnerService.deletePartner(supabase, id);
-  if (res.ok) revalidatePath("/admin/partenaires");
+  if (res.ok) revalidatePath("/admin/sponsors");
   return res;
 }

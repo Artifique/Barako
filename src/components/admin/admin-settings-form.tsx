@@ -39,7 +39,7 @@ export function AdminSettingsForm({ initialSettings }: AdminSettingsFormProps) {
     initialSettings?.isSiteActive || false
   );
   const [maintenanceMode, setMaintenanceMode] = useState(
-    initialSettings?.maintenanceMode || false
+    initialSettings?.maintenance_mode || false
   );
 
   const formSubmitAction = async (
@@ -50,7 +50,7 @@ export function AdminSettingsForm({ initialSettings }: AdminSettingsFormProps) {
       siteTitle,
       siteDescription,
       isSiteActive,
-      maintenanceMode,
+      maintenance_mode: maintenanceMode,
     };
     return updateSettingsAction(updatedData);
   };

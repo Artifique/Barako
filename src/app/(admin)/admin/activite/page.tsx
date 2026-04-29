@@ -15,7 +15,7 @@ export default async function AdminActivitePage() {
       </div>
       <Card glowing>
         <ul className="max-h-[70vh] divide-y divide-slate-100 overflow-auto text-sm">
-          {rows.map((a) => (
+          {rows.map((a: any) => (
             <li key={a.id} className="flex flex-wrap items-baseline justify-between gap-2 py-3">
               <div>
                 <span className="font-mono text-xs font-semibold text-primary">{a.action_type}</span>

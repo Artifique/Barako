@@ -48,9 +48,14 @@ export function PublicNav({ user }: { user: User | null }) {
 
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <form action={signOut}>
-                <Button type="submit" variant="ghost" size="sm">Déconnexion</Button>
-              </form>
+              <>
+                <Link href="/profil">
+                  <Button variant="ghost" size="sm">Profil</Button>
+                </Link>
+                <form action={signOut}>
+                  <Button type="submit" variant="ghost" size="sm">Déconnexion</Button>
+                </form>
+              </>
             ) : (
               <>
                 <Link href="/auth/connexion">

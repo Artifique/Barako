@@ -17,13 +17,41 @@ export async function createCompanyAction(input: CompanyInsertInput) {
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return { ok: false as const, error: "Non authentifié" };
   const res = await CompanyService.createCompany(supabase, userData.user.id, input);
-  if (res.ok) revalidatePath("/profil");
+  if (res.ok) {
+    revalidatePath("/admin/entreprises");
+  }
   return res;
 }
 
 export async function listCompaniesAdminAction() {
   const supabase = await createClient();
-  return CompanyService.listCompaniesForAdmin(supabase);
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("role", "company")
+    .order("created_at", { ascending: false });
+
+  if (error) return { ok: false as const, error: error.message };
+  
+  const companies = data.map((p) => ({
+    id: p.id,
+    name: p.company_name || p.full_name || "Entreprise sans nom",
+    owner_id: p.id,
+    description: p.bio,
+    location: p.company_address,
+    responsible_name: p.responsible_name,
+    responsible_phone: p.responsible_phone,
+    responsible_function: p.responsible_function || null,
+    sector: p.company_sector || null,
+    email: p.email || null,
+    company_type: p.company_type || null,
+    website: null,
+    logo_url: p.avatar_url,
+    created_at: p.created_at,
+    updated_at: p.updated_at
+  }));
+
+  return { ok: true as const, data: companies };
 }
 
 export async function createCompanyAsAdminAction(ownerId: string, input: CompanyInsertInput) {

@@ -14,6 +14,8 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
+import { uploadFileToSupabase } from "@/lib/utils/supabase-upload";
+import { createClient } from "@/lib/supabase/client";
 
 function SponsorFields({ sponsor }: { sponsor?: Partner }) {
   return (
@@ -23,16 +25,13 @@ function SponsorFields({ sponsor }: { sponsor?: Partner }) {
         <input name="name" required className="input-field mt-1 w-full" defaultValue={sponsor?.name ?? ""} />
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-700">Logo (URL)</label>
-        <input name="logo_url" className="input-field mt-1 w-full" defaultValue={sponsor?.logo_url ?? ""} />
+        <label className="text-xs font-semibold text-slate-700">Logo</label>
+        <input type="file" name="logo" accept="image/*" className="mt-1 w-full" />
+        {sponsor?.logo_url && <img src={sponsor.logo_url} alt="Logo" className="mt-2 h-20" />}
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-700">Contact (Email/Téléphone)</label>
+        <label className="text-xs font-semibold text-slate-700">Contact (Site web/Email)</label>
         <input name="website" className="input-field mt-1 w-full" defaultValue={sponsor?.website ?? ""} />
-      </div>
-      <div>
-        <label className="text-xs font-semibold text-slate-700">Ordre d'affichage</label>
-        <input name="display_order" type="number" className="input-field mt-1 w-full" defaultValue={sponsor?.display_order ?? 0} />
       </div>
     </div>
   );
@@ -44,13 +43,26 @@ export function AdminSponsorsPanel({ sponsors }: { sponsors: Partner[] }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Partner | null>(null);
   const [del, setDel] = useState<Partner | null>(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  const supabase = createClient();
+  const paginatedSponsors = sponsors.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const onSubmit = async (fd: FormData, id?: string) => {
+    const file = fd.get("logo") as File;
+    let logo_url = id ? edit?.logo_url : null;
+
+    if (file && file.size > 0) {
+      const uploadRes = await uploadFileToSupabase(supabase, "bourse-images", file);
+      if (!uploadRes.ok) return toast.error("Erreur upload logo");
+      logo_url = uploadRes.data?.url || null;
+    }
+
     const input = {
       name: String(fd.get("name")),
-      logo_url: String(fd.get("logo_url") || ""),
+      logo_url: logo_url || undefined,
       website: String(fd.get("website") || ""),
-      display_order: Number(fd.get("display_order") || 0),
     };
     startTransition(async () => {
       const res = id ? await updatePartnerAdminAction(id, input) : await createPartnerAdminAction(input);
@@ -78,19 +90,14 @@ export function AdminSponsorsPanel({ sponsors }: { sponsors: Partner[] }) {
       <Card className="p-0 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 uppercase text-xs">
-            <tr>
-              <th className="p-3">Nom</th>
-              <th className="p-3">Contact</th>
-              <th className="p-3 text-center">Ordre</th>
-              <th className="p-3 text-right">Actions</th>
-            </tr>
+            <tr><th className="p-3">Logo</th><th className="p-3">Nom</th><th className="p-3">Contact</th><th className="p-3 text-right">Actions</th></tr>
           </thead>
           <tbody>
-            {sponsors.map((p) => (
+            {paginatedSponsors.map((p) => (
               <tr key={p.id} className="border-t">
+                <td className="p-3"><img src={p.logo_url || ""} alt="" className="h-8 w-8 object-contain" /></td>
                 <td className="p-3 font-medium">{p.name}</td>
                 <td className="p-3 text-xs text-slate-500">{p.website || "—"}</td>
-                <td className="p-3 text-center">{p.display_order}</td>
                 <td className="p-3 text-right">
                     <Button variant="ghost" onClick={() => setEdit(p)}>✏️</Button>
                     <Button variant="ghost" onClick={() => setDel(p)}>🗑️</Button>
@@ -99,6 +106,10 @@ export function AdminSponsorsPanel({ sponsors }: { sponsors: Partner[] }) {
             ))}
           </tbody>
         </table>
+        <div className="p-4 flex gap-2">
+            <Button disabled={page === 1} onClick={() => setPage(page-1)}>Précédent</Button>
+            <Button disabled={page * itemsPerPage >= sponsors.length} onClick={() => setPage(page+1)}>Suivant</Button>
+        </div>
       </Card>
       <AdminModal open={createOpen} onOpenChange={setCreateOpen} title="Ajout" footer={<Button type="submit" form="p-add">Créer</Button>}><form id="p-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><SponsorFields /></form></AdminModal>
       <AdminModal open={!!edit} onOpenChange={(o) => !o && setEdit(null)} title="Modifier" footer={<Button type="submit" form="p-edit">Enregistrer</Button>}><form id="p-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><SponsorFields sponsor={edit ?? undefined} /></form></AdminModal>

@@ -17,13 +17,7 @@ export async function createProjectAction(input: ProjectInsertInput) {
   if (!userData.user) return { ok: false as const, error: "Non authentifié" };
   const res = await ProjectService.createProject(supabase, userData.user.id, input);
   if (res.ok) {
-    await ActivityLogService.logActivity(supabase, {
-      actor_id: userData.user.id,
-      action_type: "project_create",
-      entity_type: "project",
-      entity_id: res.data.id,
-      metadata: { title: input.title }
-    });
+    await ActivityLogService.logActivity("CREATE", "PROJECT", res.data.id, { title: input.title });
     revalidatePath("/projets");
     revalidatePath("/admin/projets");
   }

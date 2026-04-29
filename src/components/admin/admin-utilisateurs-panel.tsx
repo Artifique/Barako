@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
 import { Input } from "@/components/ui/input";
 import type { Profile } from "@/models";
-import { updateProfileAdminAction, deleteUserAdminAction, createUserAdminAction } from "@/controllers/admin.controller";
+import { updateProfileAdminAction, deleteUserAdminAction } from "@/controllers/admin.controller";
+import { createUserAdminAction } from "@/controllers/profile.controller";
 
 function UserFields({ profile }: { profile?: Profile }) {
   return (
@@ -49,6 +50,9 @@ export function AdminUtilisateursPanel({ users }: { users: Profile[] }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Profile | null>(null);
   const [del, setDel] = useState<Profile | null>(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+  const paginatedUsers = users.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const onSubmit = async (fd: FormData, id?: string) => {
     const input = {
@@ -86,7 +90,7 @@ export function AdminUtilisateursPanel({ users }: { users: Profile[] }) {
             <tr><th className="p-3">Nom</th><th className="p-3">Email</th><th className="p-3 text-center">Rôle</th><th className="p-3 text-right">Actions</th></tr>
           </thead>
           <tbody>
-            {users.map((u) => (
+            {paginatedUsers.map((u) => (
               <tr key={u.id} className="border-t">
                 <td className="p-3 font-medium">{u.full_name}</td>
                 <td className="p-3">{u.email}</td>
@@ -99,6 +103,10 @@ export function AdminUtilisateursPanel({ users }: { users: Profile[] }) {
             ))}
           </tbody>
         </table>
+        <div className="p-4 flex gap-2 border-t">
+          <Button disabled={page === 1} onClick={() => setPage(page-1)}>Précédent</Button>
+          <Button disabled={page * itemsPerPage >= users.length} onClick={() => setPage(page+1)}>Suivant</Button>
+        </div>
       </Card>
       <AdminModal open={createOpen} onOpenChange={setCreateOpen} title="Ajout" footer={<Button type="submit" form="u-add">Créer</Button>}><form id="u-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><UserFields /></form></AdminModal>
       <AdminModal open={!!edit} onOpenChange={(o) => !o && setEdit(null)} title="Modifier" footer={<Button type="submit" form="u-edit">Enregistrer</Button>}><form id="u-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><UserFields profile={edit ?? undefined} /></form></AdminModal>

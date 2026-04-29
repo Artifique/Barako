@@ -13,13 +13,7 @@ export async function applyToJobAction(input: JobApplicationInsertInput) {
   if (!userData.user) return { ok: false as const, error: "Connecte-toi pour postuler." };
   const res = await JobApplicationService.applyToJob(supabase, userData.user.id, input);
   if (res.ok) {
-    await ActivityLogService.logActivity(supabase, {
-      actor_id: userData.user.id,
-      action_type: "job_apply",
-      entity_type: "job_offer",
-      entity_id: input.job_offer_id,
-      metadata: null
-    });
+    await ActivityLogService.logActivity("APPLY", "JOB_OFFER", input.job_offer_id);
     revalidatePath("/profil");
     revalidatePath(`/bourses/${input.job_offer_id}`);
   }
@@ -52,13 +46,7 @@ export async function applyToTchakedaBourseAction(jobOfferId: string, input: Tch
 
   const res = await JobApplicationService.applyToTchakedaJob(supabase, userData.user.id, jobOfferId, input);
   if (res.ok) {
-    await ActivityLogService.logActivity(supabase, {
-      actor_id: userData.user.id,
-      action_type: "tchakeda_bourse_apply",
-      entity_type: "job_offer",
-      entity_id: jobOfferId,
-      metadata: null
-    });
+    await ActivityLogService.logActivity("APPLY_BOURSE", "JOB_OFFER", jobOfferId);
     revalidatePath("/profil");
     revalidatePath(`/bourses/${jobOfferId}`);
   }

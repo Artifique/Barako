@@ -1,8 +1,8 @@
 -- =============================================================================
--- Baarako - Schéma complet (Version corrigée Supabase)
+-- Baarako - Schéma complet (Version propre et réexécutable)
 -- =============================================================================
 
--- 1. Nettoyage (SANS supprimer le schema public)
+-- 1. Nettoyage
 drop table if exists public.job_applications cascade;
 drop table if exists public.job_offers cascade;
 drop table if exists public.companies cascade;
@@ -11,12 +11,17 @@ drop table if exists public.formations cascade;
 drop table if exists public.avantages cascade;
 drop table if exists public.partners cascade;
 drop table if exists public.profiles cascade;
+drop table if exists public.settings cascade;
+drop table if exists public.activity_logs cascade;
 
 drop type if exists public.user_role cascade;
 drop type if exists public.job_offer_status cascade;
 drop type if exists public.application_status cascade;
 drop type if exists public.project_status cascade;
 drop type if exists public.formation_type cascade;
+
+drop function if exists public.handle_new_user cascade;
+drop function if exists public.sync_company_from_profile cascade;
 
 -- 2. Extensions
 create extension if not exists "pgcrypto";
@@ -69,7 +74,7 @@ create table public.profiles (
 
 create table public.companies (
   id uuid primary key default gen_random_uuid(),
-  owner_id uuid not null references public.profiles (id) on delete cascade,
+  owner_id uuid not null references public.profiles (id) on delete cascade unique,
   name text not null,
   logo_url text,
   description text,
@@ -147,9 +152,10 @@ create table public.avantages (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   description text not null,
-  icon text,
+  image_url text,
   display_order int default 0,
-  created_at timestamptz default now()
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
 );
 
 create table public.partners (
@@ -158,15 +164,30 @@ create table public.partners (
   logo_url text,
   description text,
   website text,
-  display_order int default 0,
   created_at timestamptz default now()
 );
 
--- 5. Permissions (IMPORTANT)
+create table public.settings (
+  id uuid primary key default gen_random_uuid(),
+  data jsonb default '{}'::jsonb,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table public.activity_logs (
+  id uuid primary key default gen_random_uuid(),
+  actor_id uuid references public.profiles(id),
+  action_type text not null,
+  entity_type text not null,
+  entity_id uuid,
+  metadata jsonb,
+  created_at timestamptz default now()
+);
+
+-- 5. Permissions
 grant usage on schema public to anon, authenticated, service_role;
 grant all on schema public to postgres;
 
--- Permissions sur toutes les tables
 do $$ 
 declare 
     t text;
@@ -178,8 +199,14 @@ begin
     end loop;
 end $$;
 
--- 6. Trigger Inscription
-create or replace function public.handle_new_user() 
+-- 6. Triggers
+
+-- Nettoyage triggers
+drop trigger if exists on_auth_user_created on auth.users;
+drop trigger if exists on_profile_updated on public.profiles;
+
+-- Fonction création profil
+create function public.handle_new_user() 
 returns trigger 
 language plpgsql 
 security definer
@@ -198,8 +225,33 @@ exception
 end;
 $$;
 
-drop trigger if exists on_auth_user_created on auth.users;
-
+-- Trigger auth → profile
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
+
+-- Fonction sync company
+create function public.sync_company_from_profile()
+returns trigger as $$
+begin
+  if new.role = 'company' then
+    insert into public.companies (owner_id, name, description, location)
+    values (new.id, new.company_name, new.bio, new.location)
+    on conflict (owner_id) 
+    do update set 
+      name = excluded.name,
+      description = excluded.description,
+      location = excluded.location;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+-- Trigger profile → company
+create trigger on_profile_updated
+after insert or update on public.profiles
+for each row execute function public.sync_company_from_profile();
+
+-- 7. Initialisation
+insert into public.settings (data) 
+values ('{"maintenance_mode": false, "siteTitle": "Baarako"}');

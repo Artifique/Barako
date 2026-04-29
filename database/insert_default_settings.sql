@@ -1,0 +1,1 @@
+INSERT INTO public.settings (id, data) VALUES (gen_random_uuid(), '{"maintenance_mode": false, "siteTitle": "Baarako", "isSiteActive": true}');

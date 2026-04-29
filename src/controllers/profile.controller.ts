@@ -15,6 +15,13 @@ export async function updateMyProfileAction(input: ProfileUpdateInput) {
   return res;
 }
 
+export async function createUserAdminAction(input: { email: string; full_name: string; role: any }) {
+  const supabase = await createClient(); // Note: Assurez-vous que ce client a les droits admin
+  const res = await ProfileService.createUserAdmin(supabase, input);
+  if (res.ok) revalidatePath("/admin/utilisateurs");
+  return res;
+}
+
 export async function listUsersAdminAction(filters?: { search?: string; role?: string; limit?: number }) {
   const supabase = await createClient();
   return ProfileService.listProfilesForAdmin(supabase, filters);

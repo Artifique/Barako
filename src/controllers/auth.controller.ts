@@ -27,7 +27,7 @@ export async function signInWithEmail(
     .from("profiles")
     .select("role")
     .eq("id", authData.user.id)
-    .single();
+    .maybeSingle();
 
   revalidatePath("/", "layout");
 
@@ -47,6 +47,8 @@ export async function signUpWithEmail(
   const password = String(formData.get("password") ?? "");
   const full_name = String(formData.get("full_name") ?? "").trim();
   const role = String(formData.get("role") ?? "job_seeker") as UserRole;
+  
+  console.log("Inscription - Rôle reçu :", role);
 
   // Champs Candidats
   const dob = String(formData.get("dob") ?? "") || undefined;
@@ -117,13 +119,22 @@ export async function signUpWithEmail(
       agreement: agreement,
     };
 
-    // Mettre à jour le profil avec les champs supplémentaires
+    // Mettre à jour le profil avec les champs supplémentaires (utilisation de upsert pour gérer la latence du trigger)
     const cleanedUpdate = Object.fromEntries(
       Object.entries(profileUpdate).filter(([_, v]) => v !== undefined)
     );
-    const res = await ProfileService.updateProfile(supabase, data.user.id, cleanedUpdate as ProfileUpdateInput);
-    if (!res.ok) {
-      console.error("Erreur lors de la mise à jour du profil :", res.error);
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .upsert({
+        id: data.user.id,
+        email,
+        ...cleanedUpdate
+      })
+      .select("*")
+      .maybeSingle();
+
+    if (profileError) {
+      console.error("Erreur lors de la mise à jour du profil :", profileError.message);
       return { error: "Erreur lors de la création du profil utilisateur." };
     }
   }
