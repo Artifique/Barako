@@ -59,18 +59,17 @@ export async function createFormation(
     type: FormationType;
     description?: string | null;
     start_date: string;
-    end_date?: string | null;
-    duration_days: number;
-    location: string;
     max_places: number;
   }
 ): Promise<ServiceResult<Formation>> {
   const { data, error } = await supabase
     .from("formations")
     .insert({
-      ...input,
+      title: input.title,
+      type: input.type,
       description: input.description ?? null,
-      end_date: input.end_date ?? null
+      start_date: input.start_date,
+      max_places: input.max_places
     })
     .select("*")
     .single();
@@ -86,9 +85,6 @@ export async function updateFormation(
     type: FormationType;
     description?: string | null;
     start_date: string;
-    end_date?: string | null;
-    duration_days: number;
-    location: string;
     max_places: number;
   }
 ): Promise<ServiceResult<Formation>> {
@@ -99,9 +95,6 @@ export async function updateFormation(
       type: input.type,
       description: input.description ?? null,
       start_date: input.start_date,
-      end_date: input.end_date ?? null,
-      duration_days: input.duration_days,
-      location: input.location,
       max_places: input.max_places
     })
     .eq("id", id)

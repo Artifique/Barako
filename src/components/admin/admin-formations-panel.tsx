@@ -18,12 +18,12 @@ import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
 
 function FormationFields({ formation }: { formation?: Formation }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div className="sm:col-span-2">
+    <div className="grid gap-3">
+      <div>
         <label className="text-xs font-semibold text-slate-700">Titre</label>
         <input name="title" required className="input-field mt-1 w-full" defaultValue={formation?.title ?? ""} />
       </div>
-      <div className="sm:col-span-2">
+      <div>
         <label className="text-xs font-semibold text-slate-700">Type</label>
         <select name="type" className="input-field mt-1 w-full" defaultValue={formation?.type ?? "employability"}>
           <option value="employability">Employabilité</option>
@@ -31,26 +31,6 @@ function FormationFields({ formation }: { formation?: Formation }) {
         </select>
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-700">Instructeur</label>
-        <input name="instructor_name" className="input-field mt-1 w-full" defaultValue={formation?.instructor_name ?? ""} />
-      </div>
-      <div>
-        <label className="text-xs font-semibold text-slate-700">Niveau</label>
-        <input name="level" className="input-field mt-1 w-full" defaultValue={formation?.level ?? ""} />
-      </div>
-      <div className="sm:col-span-2">
-        <label className="text-xs font-semibold text-slate-700">Bio Instructeur</label>
-        <textarea name="instructor_bio" rows={2} className="input-field mt-1 w-full" defaultValue={formation?.instructor_bio ?? ""} />
-      </div>
-      <div className="sm:col-span-2">
-        <label className="text-xs font-semibold text-slate-700">Prérequis</label>
-        <textarea name="prerequisites" rows={2} className="input-field mt-1 w-full" defaultValue={formation?.prerequisites ?? ""} />
-      </div>
-      <div className="sm:col-span-2">
-        <label className="text-xs font-semibold text-slate-700">Image</label>
-        <input type="file" name="image" accept="image/*" className="input-field mt-1 w-full" />
-      </div>
-      <div className="sm:col-span-2">
         <label className="text-xs font-semibold text-slate-700">Description</label>
         <textarea name="description" rows={3} className="input-field mt-1 w-full" defaultValue={formation?.description ?? ""} />
       </div>
