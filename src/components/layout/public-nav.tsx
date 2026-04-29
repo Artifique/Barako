@@ -2,19 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { signOut } from "@/controllers/auth.controller"; // Server Action for sign out
+import { signOut } from "@/controllers/auth.controller";
 import { Button } from "@/components/ui/button";
 import { MainNavLinks } from "@/components/layout/main-nav-links";
-import { useState, useCallback } from "react"; // Import useState and useCallback
-// Removed clsx import and style props from SVG and Buttons
+import { useState, useCallback } from "react";
 
-// Define User type for prop, matching what PublicNav expects
 interface User {
   id: string;
-  // Add other user properties if needed
+  role?: string;
 }
 
-// PublicNav is now a Client Component receiving user data as a prop
 export function PublicNav({ user }: { user: User | null }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -52,6 +49,11 @@ export function PublicNav({ user }: { user: User | null }) {
                 <Link href="/profil">
                   <Button variant="ghost" size="sm">Profil</Button>
                 </Link>
+                {user.role === 'company' && (
+                  <Link href="/profil/avantages">
+                    <Button variant="ghost" size="sm">Mes Avantages</Button>
+                  </Link>
+                )}
                 <form action={signOut}>
                   <Button type="submit" variant="ghost" size="sm">Déconnexion</Button>
                 </form>
@@ -83,9 +85,19 @@ export function PublicNav({ user }: { user: User | null }) {
           <nav className="flex flex-col items-center gap-6 pt-10">
             <MainNavLinks onCloseMobileMenu={closeMobileMenu} />
             {user ? (
-              <form action={signOut} className="w-full" onSubmit={closeMobileMenu}>
-                <Button type="submit" variant="ghost" className="w-full">Déconnexion</Button>
-              </form>
+              <>
+                <Link href="/profil" onClick={closeMobileMenu}>
+                  <Button variant="ghost" className="w-full">Profil</Button>
+                </Link>
+                {user.role === 'company' && (
+                  <Link href="/profil/avantages" onClick={closeMobileMenu}>
+                    <Button variant="ghost" className="w-full">Mes Avantages</Button>
+                  </Link>
+                )}
+                <form action={signOut} className="w-full" onSubmit={closeMobileMenu}>
+                  <Button type="submit" variant="ghost" className="w-full">Déconnexion</Button>
+                </form>
+              </>
             ) : (
               <>
                 <Link href="/auth/connexion" className="w-full" onClick={closeMobileMenu}>
