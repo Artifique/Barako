@@ -137,7 +137,31 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
           <Button disabled={page * itemsPerPage >= formations.length} onClick={() => setPage(page+1)}>Suivant</Button>
         </div>
       </Card>
-      {/* ... modales ... */}
+      <AdminModal 
+        open={createOpen} 
+        onOpenChange={(open) => !open && setCreateOpen(false)} 
+        title="Nouvelle formation" 
+        footer={<Button type="submit" form="f-add">Créer</Button>}
+      >
+        <form id="f-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><FormationFields /></form>
+      </AdminModal>
+
+      <AdminModal 
+        open={!!edit} 
+        onOpenChange={(open) => !open && setEdit(null)} 
+        title="Modifier la formation" 
+        footer={<Button type="submit" form="f-edit">Enregistrer</Button>}
+      >
+        <form id="f-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><FormationFields formation={edit ?? undefined} /></form>
+      </AdminModal>
+
+      <ConfirmDeleteModal 
+        open={!!del} 
+        onOpenChange={(open) => !open && setDel(null)} 
+        onConfirm={onDelete} 
+        pending={isPending} 
+        title="Supprimer formation ?" 
+      />
     </div>
   );
 }

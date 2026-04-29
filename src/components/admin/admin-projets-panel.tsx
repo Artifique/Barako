@@ -114,7 +114,31 @@ export function AdminProjetsPanel({ projects }: { projects: Project[] }) {
           <Button disabled={page * itemsPerPage >= projects.length} onClick={() => setPage(page+1)}>Suivant</Button>
         </div>
       </Card>
-      {/* ... modales ... */}
+      <AdminModal 
+        open={createOpen} 
+        onOpenChange={(open) => !open && setCreateOpen(false)} 
+        title="Nouveau projet" 
+        footer={<Button type="submit" form="p-add">Créer</Button>}
+      >
+        <form id="p-add" onSubmit={(e) => { e.preventDefault(); onSubmit(new FormData(e.currentTarget)); }}><ProjectFields /></form>
+      </AdminModal>
+
+      <AdminModal 
+        open={!!edit} 
+        onOpenChange={(open) => !open && setEdit(null)} 
+        title="Modifier le projet" 
+        footer={<Button type="submit" form="p-edit">Enregistrer</Button>}
+      >
+        <form id="p-edit" onSubmit={(e) => { e.preventDefault(); edit && onSubmit(new FormData(e.currentTarget), edit.id); }}><ProjectFields project={edit ?? undefined} /></form>
+      </AdminModal>
+
+      <ConfirmDeleteModal 
+        open={!!del} 
+        onOpenChange={(open) => !open && setDel(null)} 
+        onConfirm={onDelete} 
+        pending={isPending} 
+        title="Supprimer projet ?" 
+      />
     </div>
   );
 }

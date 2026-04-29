@@ -6,6 +6,17 @@ import { getSettings } from "@/services/settings.service";
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  
+  let userWithRole = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    userWithRole = { id: user.id, role: profile?.role };
+  }
+
   const settingsRes = await getSettings();
   const maintenanceMode = settingsRes.ok && settingsRes.data?.data?.maintenanceMode;
 
@@ -16,7 +27,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           Le site est actuellement en maintenance.
         </div>
       )}
-      <PublicNav user={user} />
+      <PublicNav user={userWithRole} />
       <main className="min-h-[70vh] flex-1">{children}</main>
       <SiteFooter />
     </div>
