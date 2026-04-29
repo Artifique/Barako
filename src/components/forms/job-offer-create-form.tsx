@@ -18,7 +18,7 @@ export function JobOfferCreateForm({ companyId }: { companyId?: string | null })
     start(async () => {
       const res = await createJobOfferAction(fd);
       if (res.ok) {
-        toast.success("Bourse créée");
+        toast.success("Votre offre de bourse a été publiée.");
         (e.target as HTMLFormElement).reset();
         router.refresh();
       } else toast.error(res.error);

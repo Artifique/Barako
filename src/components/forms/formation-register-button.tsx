@@ -35,7 +35,7 @@ export function FormationRegisterButton({
       onClick={() =>
         start(async () => {
           const res = await registerFormationAction(formationId);
-          if (res.ok) toast.success("Inscription enregistrée");
+          if (res.ok) toast.success("Votre inscription à la formation a été confirmée.");
           else toast.error(res.error);
         })
       }

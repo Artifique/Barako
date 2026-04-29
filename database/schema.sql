@@ -148,6 +148,14 @@ create table public.formations (
   updated_at timestamptz default now()
 );
 
+create table public.formation_registrations (
+  id uuid primary key default gen_random_uuid(),
+  formation_id uuid not null references public.formations (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  status text default 'pending',
+  created_at timestamptz default now()
+);
+
 create table public.avantages (
   id uuid primary key default gen_random_uuid(),
   title text not null,
@@ -181,6 +189,21 @@ create table public.activity_logs (
   entity_type text not null,
   entity_id uuid,
   metadata jsonb,
+  created_at timestamptz default now()
+);
+
+create table public.recruitment_needs (
+  id uuid primary key default gen_random_uuid(),
+  company_id uuid references public.profiles(id) on delete cascade,
+  poste text not null,
+  nombre int,
+  niveau text,
+  experience text,
+  competences text,
+  conditions text[],
+  salaire text,
+  lieu text,
+  status text default 'non-traité',
   created_at timestamptz default now()
 );
 

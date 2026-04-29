@@ -29,7 +29,7 @@ export function ApplyJobForm({
         cover_letter: cover || null,
         cv_url: cv || null
       });
-      if (res.ok) toast.success("Candidature envoyée");
+      if (res.ok) toast.success("Votre candidature a bien été transmise.");
       else toast.error(res.error);
     });
   }

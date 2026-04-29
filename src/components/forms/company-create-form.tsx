@@ -22,7 +22,7 @@ export function CompanyCreateForm() {
         website: String(fd.get("website") ?? "").trim() || null
       });
       if (res.ok) {
-        toast.success("Entreprise créée");
+        toast.success("L'entreprise a été enregistrée avec succès.");
         router.refresh();
       } else toast.error(res.error);
     });

@@ -1,24 +1,14 @@
-D. BESOINS EN RECRUTEMENT
-Poste Nombre Niveau requis
-E. PROFIL RECHERCHÉ
-Niveau d’étude : ____________________________________________
-Expérience souhaitée : ____________________________________________
-Compétences clés : ____________________________________________
-F. CONDITIONS DE TRAVAIL
-■ Stage
-■ CDD
-■ CDI
-■ Journalier
-Salaire : ____________________________________________
-Lieu de travail : ____________________________________________
-G. SERVICES SOUHAITÉS
-■ Recrutement simple
-■ Pré-sélection complète
-■ Formation des candidats
-■ Suivi des employés
-H. BOURSE TCHAKÈDA
-■ Collaborer avec jeunes entrepreneur
-■ Externaliser services
-I. ENGAGEMENT DE L’ENTREPRISE
-Nom : ____________________________________________
-Signature & cachet : ____________________________________________
+create table public.recruitment_needs (
+  id uuid primary key default gen_random_uuid(),
+  company_id uuid references public.profiles(id) on delete cascade,
+  poste text not null,
+  nombre int,
+  niveau text,
+  experience text,
+  competences text,
+  conditions text[],
+  salaire text,
+  lieu text,
+  status text default 'non-traité',
+  created_at timestamptz default now()
+);

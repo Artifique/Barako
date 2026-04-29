@@ -65,8 +65,7 @@ export default async function FormationsPage() {
       {formations.length === 0 && (
         <Card glowing className="relative mx-auto mt-12 max-w-lg text-center" style={{ borderColor: primaryOrange }}>
           <p className="text-sm leading-relaxed text-slate-600">
-            Aucune session pour le moment. Lance le script <span className="font-mono text-xs text-primary">seed.sql</span>{" "}
-            dans Supabase pour afficher des exemples.
+            Nous préparons actuellement de nouvelles sessions de formation. Veuillez revenir consulter cette page très prochainement.
           </p>
         </Card>
       )}

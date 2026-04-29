@@ -9,8 +9,8 @@ export default async function HomePage() {
   const statsData = await getPublicStats();
   
   const stats = [
-    { label: "Bourses d’emploi", value: `${statsData.offersCount}+`, hint: "Bourse Baarako" },
-    { label: "Projets accompagnés", value: `${statsData.projectsCount}+`, hint: "Bourse Tchakèda" },
+    { label: "Bourses d’emploi", value: `${statsData.offersCount}`, hint: "Bourse Baarako" },
+    { label: "Projets accompagnés", value: `${statsData.projectsCount}`, hint: "Initiatives soutenues" },
     { label: "Entreprises partenaires", value: `${statsData.companiesCount}`, hint: "Réseau" },
     { label: "Taux d’insertion", value: "85%", hint: "Objectif" }
   ];

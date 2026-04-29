@@ -19,7 +19,7 @@ export function ProjectSubmitForm() {
     const needs_mentoring = fd.get("needs_mentoring") === "on";
     const needs_funding = fd.get("needs_funding") === "on";
     if (!title || !sector) {
-      toast.error("Titre et secteur requis");
+      toast.error("Veuillez renseigner le titre et le secteur du projet.");
       return;
     }
     start(async () => {
@@ -32,7 +32,7 @@ export function ProjectSubmitForm() {
         needs_funding
       });
       if (res.ok) {
-        toast.success("Projet soumis");
+        toast.success("Votre projet a été soumis avec succès.");
         (e.target as HTMLFormElement).reset();
       } else toast.error(res.error);
     });

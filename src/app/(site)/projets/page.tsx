@@ -71,19 +71,7 @@ export default async function ProjetsPage() {
         </p>
       </header>
 
-      {canSubmit && (
-        <section className="relative mt-12 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/90 p-6 shadow-[0_12px_40px_-16px_rgba(12,74,110,0.12)] ring-1 ring-slate-200/60 md:p-8" style={{ borderColor: primaryOrange }}>
-          <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-teal-500 via-primary to-secondary" aria-hidden />
-          <div className="pointer-events-none absolute -right-20 top-1/2 h-48 w-48 -translate-y-1/2 rounded-full blur-2xl" style={{ background: `radial-gradient(circle at center, ${lightOrange}33, transparent 55%)` }}/>
-          <div className="relative pl-4 md:pl-5">
-            <h2 className="font-display text-xl font-bold text-slate-900" style={{ color: darkBlue }}>Soumettre un projet</h2>
-            <p className="mt-1 max-w-2xl text-sm text-slate-600">
-              Décrivez votre idée : notre équipe pourra la relier aux dispositifs d’accompagnement adaptés.
-            </p>
-            <ProjectSubmitForm />
-          </div>
-        </section>
-      )}
+      {/* Section de soumission retirée */}
 
       <div className="relative mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((p) => (
@@ -97,8 +85,7 @@ export default async function ProjetsPage() {
             ◈
           </div>
           <p className="text-sm font-medium leading-relaxed text-slate-700">
-            Connecte-toi avec le rôle <span className="font-semibold" style={{ color: primaryOrange }}>« entrepreneur »</span> pour
-            soumettre un projet et le voir apparaître ici.
+            Connectez-vous pour découvrir l'ensemble des projets portés par les jeunes entrepreneurs de la communauté Baarako.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/auth/connexion?next=/projets">

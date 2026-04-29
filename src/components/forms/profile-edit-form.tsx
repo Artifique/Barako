@@ -25,7 +25,7 @@ export function ProfileEditForm({
         bio: String(fd.get("bio") ?? "") || null
       });
       if (res.ok) {
-        toast.success("Profil mis à jour");
+        toast.success("Votre profil a bien été mis à jour.");
         router.refresh();
       } else toast.error(res.error);
     });

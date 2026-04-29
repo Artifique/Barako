@@ -135,11 +135,11 @@ export async function signUpWithEmail(
 
     if (profileError) {
       console.error("Erreur lors de la mise à jour du profil :", profileError.message);
-      return { error: "Erreur lors de la création du profil utilisateur." };
+      return { error: "Une erreur technique est survenue lors de la création de votre profil. Veuillez réessayer." };
     }
   }
 
-  return { success: "Vérifie ta boîte mail pour confirmer le compte si l’option est activée." };
+  return { success: "Inscription réussie ! Veuillez consulter vos e-mails pour confirmer votre compte." };
 }
 
 export async function signOut(): Promise<void> {
