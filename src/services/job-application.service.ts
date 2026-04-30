@@ -49,7 +49,8 @@ export async function listApplicationsForJobOffer(
     .select(
       `
       *,
-      job_offers ( id, title, companies ( name, logo_url ) )
+      job_offers ( id, title, companies ( name, logo_url ) ),
+      applicant:profiles(full_name, email, phone)
     `
     )
     .eq("job_offer_id", jobOfferId);

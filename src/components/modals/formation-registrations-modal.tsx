@@ -19,8 +19,15 @@ export function FormationRegistrationsModal({
 
   useEffect(() => {
     if (open) {
+      console.log("DEBUG: Ouverture modale - ID Formation:", formationId);
       getFormationRegistrationsAction(formationId).then(res => {
-        if (res.ok) setRegs(res.data);
+        console.log("DEBUG: Résultat de getFormationRegistrationsAction:", res);
+        if (res.ok) {
+            console.log("DEBUG: Nombre d'inscriptions reçues:", res.data.length);
+            setRegs(res.data);
+        } else {
+            console.error("DEBUG: Erreur lors de la récupération:", res.error);
+        }
       });
     }
   }, [open, formationId]);

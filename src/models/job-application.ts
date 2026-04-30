@@ -21,6 +21,7 @@ export interface JobApplicationWithOffer extends JobApplication {
     title: string;
     companies: { name: string; logo_url: string | null } | null;
   } | null;
+  applicant?: { full_name: string | null; email: string | null; phone: string | null } | null;
 }
 
 export interface JobApplicationInsertInput {

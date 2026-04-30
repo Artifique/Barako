@@ -8,7 +8,7 @@ import {
   deleteFormationAdminAction,
   updateFormationAdminAction
 } from "@/controllers/formation.controller";
-import { FormationTypes, type Formation, type FormationType } from "@/models";
+import { FormationTypes, type Formation, type FormationType, type FormationWithPlaces } from "@/models";
 import { AdminModal } from "@/components/admin/admin-modal";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Button } from "@/components/ui/button";
@@ -47,13 +47,13 @@ function FormationFields({ formation }: { formation?: Formation }) {
   );
 }
 
-export function AdminFormationsPanel({ formations }: { formations: Formation[] }) {
+export function AdminFormationsPanel({ formations }: { formations: FormationWithPlaces[] }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Formation | null>(null);
   const [del, setDel] = useState<Formation | null>(null);
-  const [viewRegs, setViewRegs] = useState<Formation | null>(null);
+  const [viewRegs, setViewRegs] = useState<FormationWithPlaces | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
   const paginatedFormations = formations.slice((page - 1) * itemsPerPage, page * itemsPerPage);
@@ -104,9 +104,12 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
                 </td>
                 <td className="p-3"><Badge>{f.type}</Badge></td>
                 <td className="p-3 text-sm">{f.start_date}</td>
-                <td className="p-3 text-center">{f.max_places}</td>
+                <td className="p-3 text-center">{f.places_left} / {f.max_places}</td>
                 <td className="p-3 text-right">
-                  <Button variant="ghost" size="sm" onClick={() => setViewRegs(f)}>📋</Button>
+                  <Button variant="ghost" size="sm" onClick={() => {
+                    console.log("Clic sur Inscrits pour formation :", f.id);
+                    setViewRegs(f);
+                  }}>📋</Button>
                   <Button variant="ghost" size="sm" onClick={() => setEdit(f)}>✏️</Button>
                   <Button variant="ghost" size="sm" onClick={() => setDel(f)}>🗑️</Button>
                 </td>

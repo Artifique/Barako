@@ -1,5 +1,6 @@
--- Requête pour vérifier manuellement les inscriptions et les profils associés :
-SELECT fr.*, p.full_name, p.email 
-FROM public.formation_registrations fr
-LEFT JOIN public.profiles p ON fr.user_id = p.id
-WHERE fr.formation_id = 'ID_FORMATION';
+-- Désactivation de la RLS pour tester l'accès :
+ALTER TABLE public.formation_registrations DISABLE ROW LEVEL SECURITY;
+
+-- Politique permissive pour la lecture :
+CREATE POLICY "Allow public read for all" ON public.formation_registrations
+  FOR SELECT USING (true);

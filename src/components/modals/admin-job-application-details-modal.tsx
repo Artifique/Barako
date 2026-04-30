@@ -62,22 +62,35 @@ export function AdminJobApplicationDetailsModal({
       ) : applications.length === 0 ? (
         <div className="py-8 text-center text-sm text-slate-600">Aucune candidature pour cette bourse.</div>
       ) : (
-        <div className="space-y-4">
-          {applications.map((app) => (
-            <Card key={app.id} className="p-4">
-              <p className="font-semibold">{app.cover_letter ? app.cover_letter.substring(0, 50) + '...' : 'Pas de lettre de motivation'}</p>
-              <p className="text-sm text-slate-600">Statut : {app.status}</p>
-              {app.cv_url && <a href={app.cv_url} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline">Voir CV</a>}
-              {app.has_activity_idea !== undefined && (
-                <p className="text-sm text-slate-600">Idée d'activité : {app.has_activity_idea ? "Oui" : "Non"}</p>
-              )}
-              {app.has_exercised_before !== undefined && (
-                <p className="text-sm text-slate-600">Déjà exercé : {app.has_exercised_before ? "Oui" : "Non"}</p>
-              )}
-              {/* Ajoutez ici d'autres détails du candidat si nécessaire */}
-            </Card>
-          ))}
-        </div>
+        <table className="w-full text-sm">
+          <thead className="bg-slate-50 uppercase text-xs">
+            <tr>
+              <th className="p-3 text-left">Nom</th>
+              <th className="p-3 text-left">Contact</th>
+              <th className="p-3 text-left">Motivation</th>
+              <th className="p-3 text-center">CV</th>
+            </tr>
+          </thead>
+          <tbody>
+            {applications.map((app) => (
+              <tr key={app.id} className="border-t">
+                <td className="p-3 font-medium">{app.applicant?.full_name || "—"}</td>
+                <td className="p-3">
+                    <div className="flex flex-col">
+                        <span>{app.applicant?.email || "—"}</span>
+                        <span className="text-xs text-slate-500">{app.applicant?.phone || "Pas de téléphone"}</span>
+                    </div>
+                </td>
+                <td className="p-3 max-w-[200px] truncate">{app.cover_letter || "—"}</td>
+                <td className="p-3 text-center">
+                    {app.cv_url ? (
+                        <a href={app.cv_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Voir</a>
+                    ) : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </AdminModal>
   );
