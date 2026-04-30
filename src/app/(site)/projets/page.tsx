@@ -51,9 +51,6 @@ export default async function ProjetsPage() {
       />
 
       <header className="relative mx-auto max-w-3xl text-center">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em]" style={{ color: darkGreen }}>
-          Bourse Tchakèda
-        </p>
         <h1 className="mt-3 font-display text-4xl font-extrabold tracking-tight text-slate-900 md:text-[2.65rem] md:leading-[1.1]">
           Projets{" "}
           <span

@@ -39,17 +39,9 @@ export default function ProfilPage({ profile, avantages }: ProfilProps) {
           {profile?.role === "company" && (
             <Card className="p-6 rounded-3xl shadow-sm border-slate-100 bg-slate-900 text-white">
               <h2 className="text-xl font-bold mb-6">Pour vous</h2>
-              <div className="space-y-4">
-                {avantages?.map((a: any) => (
-                  <div key={a.id} className="flex gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <div>
-                        <p className="font-semibold">{a.title}</p>
-                        <p className="text-xs text-slate-300">{a.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <p className="text-slate-300 text-sm mb-6">
+                Accédez à nos services d'accompagnement exclusifs pour le recrutement et le développement de votre entreprise.
+              </p>
               <Button onClick={() => setShowBesoins(true)} className="w-full mt-8 rounded-full bg-primary hover:bg-orange-600">
                   Exprimer mes besoins
               </Button>

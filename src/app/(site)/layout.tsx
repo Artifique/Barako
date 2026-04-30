@@ -2,6 +2,7 @@ import { PublicNav } from "@/components/layout/public-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { createClient } from "@/lib/supabase/server";
 import { getSettings } from "@/services/settings.service";
+import { Toaster } from "react-hot-toast";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -22,6 +23,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="flex min-h-screen flex-col">
+      <Toaster position="top-right" />
       {maintenanceMode && (
         <div className="bg-amber-500 text-white text-center py-2 text-sm font-semibold">
           Le site est actuellement en maintenance.

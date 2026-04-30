@@ -30,19 +30,18 @@ export default async function Page() {
       
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {avantages.map((a: any) => (
-          <div key={a.id} className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(245,124,0,0.15)] transition-all duration-500 hover:-translate-y-2">
+          <div key={a.id} className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             {a.image_url && (
-              <div className="h-56 overflow-hidden relative border-b-4 border-primary">
-                <img src={a.image_url} alt={a.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="h-32 overflow-hidden relative border-b-4 border-primary">
+                <img src={a.image_url} alt={a.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
               </div>
             )}
-            <div className="p-8 flex-1 flex flex-col">
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">{a.title}</h2>
-              <p className="text-slate-600 leading-relaxed text-base flex-1">{a.description}</p>
+            <div className="p-5 flex-1 flex flex-col">
+              <h2 className="text-lg font-bold text-slate-900 mb-2">{a.title}</h2>
+              <p className="text-slate-600 leading-relaxed text-sm flex-1">{a.description}</p>
               
-              <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-semibold text-primary uppercase tracking-wider italic">Baarako Partner</span>
+              <div className="mt-6 pt-4 border-t border-slate-100">
+                <span className="text-[10px] font-semibold text-primary uppercase tracking-wider italic">Baarako Partner</span>
               </div>
             </div>
           </div>

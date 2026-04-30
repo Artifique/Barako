@@ -1,16 +1,28 @@
 "use client";
 
+import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AdminModal } from "@/components/admin/admin-modal";
 import toast from "react-hot-toast";
+import { submitRecruitmentNeedAction } from "@/controllers/recruitment.controller";
 
 export function BesoinsRecrutementModal({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Vos besoins ont bien été transmis.");
-    onOpenChange(false);
+    const fd = new FormData(e.currentTarget);
+    startTransition(async () => {
+        const res = await submitRecruitmentNeedAction(fd);
+        if (res.ok) {
+            toast.success("Vos besoins ont bien été transmis.");
+            onOpenChange(false);
+        } else {
+            toast.error(res.error || "Erreur lors de la soumission.");
+        }
+    });
   };
 
   return (
@@ -37,7 +49,9 @@ export function BesoinsRecrutementModal({ open, onOpenChange }: { open: boolean,
         <Input name="salaire" placeholder="Salaire" className="w-full" />
         <Input name="lieu" placeholder="Lieu de travail" className="w-full" />
         <div className="sticky bottom-0 bg-white pt-2">
-            <Button type="submit" className="w-full bg-primary hover:bg-orange-600">Envoyer mes besoins</Button>
+            <Button type="submit" className="w-full bg-primary hover:bg-orange-600" disabled={isPending}>
+                {isPending ? "Envoi..." : "Envoyer mes besoins"}
+            </Button>
         </div>
       </form>
     </AdminModal>

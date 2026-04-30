@@ -7,17 +7,23 @@ export async function listFormations(supabase: SupabaseClient): Promise<ServiceR
     .from("formations")
     .select("*")
     .order("start_date", { ascending: true });
+  
   if (error) return fail(error.message);
+  
   const list = (formations ?? []) as Formation[];
   const withPlaces: FormationWithPlaces[] = [];
+  
   for (const f of list) {
+    // Calculer les places en faisant un try/catch silencieux ou une gestion d'erreur souple
     const { count, error: cErr } = await supabase
       .from("formation_registrations")
       .select("id", { count: "exact", head: true })
       .eq("formation_id", f.id)
       .in("status", ["pending", "confirmed"]);
-    if (cErr) return fail(cErr.message);
-    const registered = count ?? 0;
+    
+    // Si une erreur survient sur les inscriptions, on ignore ce compteur pour ne pas bloquer tout l'affichage
+    const registered = cErr ? 0 : (count ?? 0);
+    
     withPlaces.push({
       ...f,
       registered_count: registered,

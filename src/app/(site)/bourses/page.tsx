@@ -73,7 +73,6 @@ export default async function OffresPage() {
               {o.title}
             </h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              <Badge variant="info" style={{ backgroundColor: darkGreen, color: 'white' }}>{o.contract_type}</Badge>
               {o.sector && <Badge variant="gold" style={{ backgroundColor: yellowGold, color: darkBlue }}>{o.sector}</Badge>}
             </div>
             <p className="mt-3 text-sm text-slate-600">
