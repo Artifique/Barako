@@ -41,13 +41,6 @@ function SubmitButton() {
 export function RegisterForm() {
   const [state, formAction] = useFormState(signUpWithEmail, initial);
   const [selectedRole, setSelectedRole] = useState<UserRole>("job_seeker");
-  const [showStatus, setShowStatus] = useState(false);
-
-  useEffect(() => {
-    if (state?.error || state?.success) {
-      setShowStatus(true);
-    }
-  }, [state]);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedRole(event.target.value as UserRole);
@@ -70,21 +63,18 @@ export function RegisterForm() {
     setSelectedCompanyType(event.target.value as CompanyType);
   };
 
-  const router = useRouter();
   return (
     <form action={formAction} className="space-y-4">
-      <StatusModal 
-        open={showStatus} 
-        onOpenChange={(open) => {
-            setShowStatus(open);
-            if (!open && state?.success) {
-                router.push("/");
-            }
-        }}
-        title={state?.error ? "Une erreur est survenue" : "Inscription réussie !"}
-        message={state?.error || state?.success || ""}
-        isError={!!state?.error}
-      />
+      {state?.success && (
+        <div className="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg border border-green-200">
+          {state.success}
+        </div>
+      )}
+      {state?.error && (
+        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-200">
+          {state.error}
+        </div>
+      )}
       
       <div>
         <label className="text-xs font-medium text-slate-600">Nom complet</label>

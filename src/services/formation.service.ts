@@ -30,7 +30,35 @@ export async function listFormations(supabase: SupabaseClient): Promise<ServiceR
   return ok(withPlaces);
 }
 
-// ... (registerToFormation identique)
+export async function registerToFormation(
+  supabase: SupabaseClient,
+  userId: string,
+  formationId: string
+): Promise<ServiceResult<{ id: string }>> {
+  const { data: existing, error: checkErr } = await supabase
+    .from("formation_registrations")
+    .select("id")
+    .eq("formation_id", formationId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (checkErr) return fail(checkErr.message);
+  if (existing) return fail("Vous êtes déjà inscrit à cette formation.");
+
+  const places = await listFormations(supabase);
+  if (!places.ok) return fail(places.error);
+  const f = places.data.find((x) => x.id === formationId);
+  if (!f) return fail("Formation introuvable");
+  if (f.places_left <= 0) return fail("Plus de places disponibles");
+
+  const { data, error } = await supabase
+    .from("formation_registrations")
+    .insert({ formation_id: formationId, user_id: userId })
+    .select("id")
+    .single();
+  if (error) return fail(error.message);
+  return ok({ id: data.id as string });
+}
 
 export async function listFormationsForAdmin(supabase: SupabaseClient): Promise<ServiceResult<FormationWithPlaces[]>> {
   const { data: formations, error } = await supabase
@@ -59,44 +87,82 @@ export async function listFormationsForAdmin(supabase: SupabaseClient): Promise<
   return ok(withPlaces as FormationWithPlaces[]);
 }
 
-// ... (create/update/delete identiques)
+export async function createFormation(
+  supabase: SupabaseClient,
+  input: {
+    title: string;
+    type: FormationType;
+    description?: string | null;
+    start_date: string;
+    max_places: number;
+  }
+): Promise<ServiceResult<Formation>> {
+  const { data, error } = await supabase
+    .from("formations")
+    .insert({
+      title: input.title,
+      type: input.type,
+      description: input.description ?? null,
+      start_date: input.start_date,
+      max_places: input.max_places
+    })
+    .select("*")
+    .single();
+  if (error) return fail(error.message);
+  return ok(data as Formation);
+}
+
+export async function updateFormation(
+  supabase: SupabaseClient,
+  id: string,
+  input: {
+    title: string;
+    type: FormationType;
+    description?: string | null;
+    start_date: string;
+    max_places: number;
+  }
+): Promise<ServiceResult<Formation>> {
+  const { data, error } = await supabase
+    .from("formations")
+    .update({
+      title: input.title,
+      type: input.type,
+      description: input.description ?? null,
+      start_date: input.start_date,
+      max_places: input.max_places
+    })
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) return fail(error.message);
+  return ok(data as Formation);
+}
+
+export async function deleteFormation(supabase: SupabaseClient, id: string): Promise<ServiceResult<void>> {
+  const { error } = await supabase.from("formations").delete().eq("id", id);
+  if (error) return fail(error.message);
+  return ok(undefined);
+}
 
 export async function getFormationRegistrations(
   supabase: SupabaseClient,
   formationId: string
 ): Promise<ServiceResult<any[]>> {
-  console.log("DEBUG SERVICE: Tentative de récupération pour formation_id:", formationId);
-  
   const { data: registrations, error: regError } = await supabase
     .from("formation_registrations")
     .select("*")
     .eq("formation_id", formationId);
   
-  console.log("DEBUG SERVICE: Inscriptions brutes trouvées:", registrations);
+  if (regError) return fail(regError.message);
   
-  if (regError) {
-    console.error("Erreur récup. inscriptions:", regError);
-    return fail(regError.message);
-  }
-  
-  if (!registrations || registrations.length === 0) {
-      console.log("DEBUG SERVICE: Aucune inscription trouvée pour cet ID.");
-      return ok([]);
-  }
+  if (!registrations || registrations.length === 0) return ok([]);
 
   const userIds = Array.from(new Set(registrations.map((r) => r.user_id)));
-  console.log("DEBUG SERVICE: UserIDs trouvés:", userIds);
-  
   const { data: profiles, error: profError } = await supabase
     .from("profiles")
     .select("id, full_name, email")
     .in("id", userIds);
-
-  if (profError) {
-    console.error("Erreur récup. profils:", profError);
-  }
-
-  console.log("DEBUG SERVICE: Profils trouvés:", profiles);
 
   const enriched = registrations.map((r: any) => ({
     ...r,

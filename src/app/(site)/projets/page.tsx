@@ -96,13 +96,9 @@ export default async function ProjetsPage() {
       )}
 
       {loggedNotEntrepreneur && (
-        <aside className="relative mx-auto mt-12 max-w-xl overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-amber-50/80 to-white p-8 text-center ring-1 ring-amber-100/80" style={{ borderColor: lightOrange }}>
-          <p className="text-sm leading-relaxed text-amber-950/90">
-            Ton compte n’est pas en rôle <strong>entrepreneur</strong>. Va sur ta{" "}
-            <Link href="/profil" className="font-semibold underline-offset-2 hover:underline" style={{ color: primaryOrange }}>
-              page profil
-            </Link>{" "}
-            ou contacte l’administrateur pour faire évoluer ton rôle.
+        <aside className="relative mx-auto mt-12 max-w-xl overflow-hidden rounded-2xl border border-slate-200/90 bg-gradient-to-br from-slate-50 to-white p-8 text-center shadow-inner ring-1 ring-slate-200/70">
+          <p className="text-sm leading-relaxed text-slate-700">
+            Bienvenue sur l'espace projet. Explorez les initiatives portées par nos entrepreneurs et découvrez comment les soutenir.
           </p>
         </aside>
       )}
