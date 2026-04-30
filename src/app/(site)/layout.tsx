@@ -26,10 +26,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Toaster 
         position="top-center" 
         toastOptions={{
-          className: 'text-sm',
-          duration: 3000,
+          className: '!text-sm !px-4 !py-3 !rounded-xl !shadow-2xl',
+          duration: 3500,
           style: {
             maxWidth: '90vw',
+            width: '100%',
+            marginTop: 'env(safe-area-inset-top)', // Support pour notch mobile
           },
         }} 
       />
