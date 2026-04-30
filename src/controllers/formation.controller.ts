@@ -5,9 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 import * as FormationService from "@/services/formation.service";
 import type { Formation } from "@/models/formation";
 
-export async function listFormationsAdminAction() {
+export async function listFormationsForAdminAction() {
   const supabase = await createClient();
-  return FormationService.listFormations(supabase);
+  return FormationService.listFormationsForAdmin(supabase);
 }
 
 export async function listFormationsAction() {

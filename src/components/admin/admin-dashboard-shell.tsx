@@ -22,6 +22,7 @@ const navSections: { title: string; items: { href: string; label: string; icon: 
     { href: "/admin/avantages", label: "Avantages", icon: "★" },
     { href: "/admin/bourses", label: "Bourses d’emploi", icon: "◆" },
     { href: "/admin/entreprises", label: "Entreprises", icon: "⌂" },
+    { href: "/admin/besoins", label: "Besoins Entreprises", icon: "✎" },
     { href: "/admin/projets", label: "Projets", icon: "◇" },
     { href: "/admin/formations", label: "Formations", icon: "◈" },
     { href: "/admin/sponsors", label: "Sponsors", icon: "⚬" }

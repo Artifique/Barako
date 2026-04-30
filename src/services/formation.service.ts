@@ -109,3 +109,15 @@ export async function deleteFormation(supabase: SupabaseClient, id: string): Pro
   if (error) return fail(error.message);
   return ok(undefined);
 }
+
+export async function getFormationRegistrations(
+  supabase: SupabaseClient,
+  formationId: string
+): Promise<ServiceResult<any[]>> {
+  const { data, error } = await supabase
+    .from("formation_registrations")
+    .select("*, user:profiles(full_name, email)")
+    .eq("formation_id", formationId);
+  if (error) return fail(error.message);
+  return ok(data ?? []);
+}

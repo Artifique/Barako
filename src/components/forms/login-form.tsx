@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { signInWithEmail, type AuthFormState } from "@/controllers/auth.controller";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const initial: AuthFormState = {};
 
@@ -29,6 +30,9 @@ export function LoginForm() {
       <div>
         <label className="text-xs font-medium text-slate-600">Mot de passe</label>
         <Input name="password" type="password" required autoComplete="current-password" className="mt-1" />
+        <div className="text-right mt-1">
+          <Link href="/auth/mot-de-passe-oublie" className="text-xs text-primary hover:underline">Mot de passe oublié ?</Link>
+        </div>
       </div>
       <SubmitButton />
     </form>

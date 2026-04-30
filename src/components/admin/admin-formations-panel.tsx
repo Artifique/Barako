@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ConfirmDeleteModal } from "@/components/modals/confirm-delete-modal";
+import { FormationRegistrationsModal } from "@/components/modals/formation-registrations-modal";
 
 function FormationFields({ formation }: { formation?: Formation }) {
   return (
@@ -52,6 +53,7 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
   const [createOpen, setCreateOpen] = useState(false);
   const [edit, setEdit] = useState<Formation | null>(null);
   const [del, setDel] = useState<Formation | null>(null);
+  const [viewRegs, setViewRegs] = useState<Formation | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
   const paginatedFormations = formations.slice((page - 1) * itemsPerPage, page * itemsPerPage);
@@ -99,14 +101,14 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
               <tr key={f.id} className="border-t">
                 <td className="p-3">
                     <p className="font-semibold">{f.title}</p>
-                    <p className="text-xs text-slate-500">{f.instructor_name}</p>
                 </td>
                 <td className="p-3"><Badge>{f.type}</Badge></td>
                 <td className="p-3 text-sm">{f.start_date}</td>
                 <td className="p-3 text-center">{f.max_places}</td>
                 <td className="p-3 text-right">
-                  <Button variant="ghost" onClick={() => setEdit(f)}>✏️</Button>
-                  <Button variant="ghost" onClick={() => setDel(f)}>🗑️</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setViewRegs(f)}>📋</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setEdit(f)}>✏️</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setDel(f)}>🗑️</Button>
                 </td>
               </tr>
             ))}
@@ -117,6 +119,16 @@ export function AdminFormationsPanel({ formations }: { formations: Formation[] }
           <Button disabled={page * itemsPerPage >= formations.length} onClick={() => setPage(page+1)}>Suivant</Button>
         </div>
       </Card>
+      
+      {viewRegs && (
+        <FormationRegistrationsModal 
+          open={!!viewRegs} 
+          onOpenChange={(o) => !o && setViewRegs(null)} 
+          formationId={viewRegs.id} 
+          formationTitle={viewRegs.title}
+        />
+      )}
+      
       <AdminModal 
         open={createOpen} 
         onOpenChange={(open) => !open && setCreateOpen(false)} 
