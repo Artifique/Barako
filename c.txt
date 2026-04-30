@@ -1,2 +1,5 @@
-GRANT ALL ON TABLE public.formation_registrations TO authenticated;
-GRANT ALL ON TABLE public.formation_registrations TO service_role;
+-- Requête pour vérifier manuellement les inscriptions et les profils associés :
+SELECT fr.*, p.full_name, p.email 
+FROM public.formation_registrations fr
+LEFT JOIN public.profiles p ON fr.user_id = p.id
+WHERE fr.formation_id = 'ID_FORMATION';

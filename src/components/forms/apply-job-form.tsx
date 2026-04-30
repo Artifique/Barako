@@ -6,6 +6,8 @@ import { applyToJobAction } from "@/controllers/job-application.controller";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { uploadFileToSupabase } from "@/lib/utils/supabase-upload";
+import { createClient } from "@/lib/supabase/client";
 
 export function ApplyJobForm({
   jobOfferId,
@@ -17,17 +19,29 @@ export function ApplyJobForm({
   canApply: boolean;
 }) {
   const [pending, start] = useTransition();
+  const supabase = createClient();
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const cover = String(fd.get("cover_letter") ?? "");
-    const cv = String(fd.get("cv_url") ?? "");
+    const cvFile = fd.get("cv_file") as File;
+    
     start(async () => {
+      let cv_url = null;
+      if (cvFile && cvFile.size > 0) {
+          const uploadRes = await uploadFileToSupabase(supabase, "bourse-images", cvFile);
+          if (!uploadRes.ok) {
+              toast.error("Erreur lors de l'upload du CV.");
+              return;
+          }
+          cv_url = uploadRes.data?.url || null;
+      }
+
       const res = await applyToJobAction({
         job_offer_id: jobOfferId,
         cover_letter: cover || null,
-        cv_url: cv || null
+        cv_url: cv_url
       });
       if (res.ok) toast.success("Votre candidature a bien été transmise.");
       else toast.error(res.error);
@@ -56,9 +70,9 @@ export function ApplyJobForm({
   return (
     <form onSubmit={onSubmit} className="mt-6 space-y-3">
       <label className="block text-xs font-medium text-slate-600">Lettre de motivation (optionnel)</label>
-      <textarea name="cover_letter" rows={4} className="input-field" />
-      <label className="block text-xs font-medium text-slate-600">Lien CV (PDF hébergé — Storage Supabase)</label>
-      <Input name="cv_url" placeholder="https://..." />
+      <textarea name="cover_letter" rows={4} className="input-field w-full border rounded-lg p-2" />
+      <label className="block text-xs font-medium text-slate-600">Télécharger votre CV</label>
+      <Input name="cv_file" type="file" accept=".pdf,.doc,.docx" required />
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Envoi…" : "Postuler maintenant"}
       </Button>

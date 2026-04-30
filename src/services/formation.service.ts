@@ -120,10 +120,26 @@ export async function getFormationRegistrations(
   supabase: SupabaseClient,
   formationId: string
 ): Promise<ServiceResult<any[]>> {
-  const { data, error } = await supabase
+  const { data: registrations, error: regError } = await supabase
     .from("formation_registrations")
-    .select("*, user:profiles(full_name, email)")
+    .select("*")
     .eq("formation_id", formationId);
-  if (error) return fail(error.message);
-  return ok(data ?? []);
+  
+  if (regError) return fail(regError.message);
+  if (!registrations || registrations.length === 0) return ok([]);
+
+  const userIds = Array.from(new Set(registrations.map((r) => r.user_id)));
+  const { data: profiles, error: profError } = await supabase
+    .from("profiles")
+    .select("id, full_name, email")
+    .in("id", userIds);
+
+  if (profError) return fail(profError.message);
+
+  const enriched = registrations.map((r) => ({
+    ...r,
+    user: profiles?.find((p) => p.id === r.user_id)
+  }));
+
+  return ok(enriched);
 }

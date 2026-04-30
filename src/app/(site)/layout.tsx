@@ -23,7 +23,16 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Toaster position="top-right" />
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          className: 'text-sm',
+          duration: 3000,
+          style: {
+            maxWidth: '90vw',
+          },
+        }} 
+      />
       {maintenanceMode && (
         <div className="bg-amber-500 text-white text-center py-2 text-sm font-semibold">
           Le site est actuellement en maintenance.
