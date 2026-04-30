@@ -38,11 +38,24 @@ export async function registerToFormation(
   userId: string,
   formationId: string
 ): Promise<ServiceResult<{ id: string }>> {
+  // 1. Vérifier si l'utilisateur est déjà inscrit
+  const { data: existing, error: checkErr } = await supabase
+    .from("formation_registrations")
+    .select("id")
+    .eq("formation_id", formationId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (checkErr) return fail(checkErr.message);
+  if (existing) return fail("Vous êtes déjà inscrit à cette formation.");
+
+  // 2. Vérifier les places disponibles
   const places = await listFormations(supabase);
   if (!places.ok) return fail(places.error);
   const f = places.data.find((x) => x.id === formationId);
   if (!f) return fail("Formation introuvable");
   if (f.places_left <= 0) return fail("Plus de places disponibles");
+
   const { data, error } = await supabase
     .from("formation_registrations")
     .insert({ formation_id: formationId, user_id: userId })
