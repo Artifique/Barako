@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ProfileEditForm } from "@/components/forms/profile-edit-form";
 import { signOut } from "@/controllers/auth.controller";
+import Link from "next/link";
 import { BesoinsRecrutementModal } from "@/components/modals/besoins-recrutement-modal";
 
 interface ProfilProps {
@@ -42,14 +43,15 @@ export default function ProfilPage({ profile, avantages }: ProfilProps) {
               <p className="text-slate-300 text-sm mb-6">
                 Accédez à nos services d'accompagnement exclusifs pour le recrutement et le développement de votre entreprise.
               </p>
-              <Button onClick={() => setShowBesoins(true)} className="w-full mt-8 rounded-full bg-primary hover:bg-orange-600">
-                  Exprimer mes besoins
-              </Button>
+              <Link href="/profil/besoins" className="w-full">
+                  <Button className="w-full mt-8 rounded-full bg-primary hover:bg-orange-600">
+                      Exprimer mes besoins
+                  </Button>
+              </Link>
             </Card>
           )}
         </div>
       </div>
-      <BesoinsRecrutementModal open={showBesoins} onOpenChange={setShowBesoins} />
     </div>
   );
 }

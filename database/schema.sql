@@ -278,3 +278,6 @@ for each row execute function public.sync_company_from_profile();
 -- 7. Initialisation
 insert into public.settings (data) 
 values ('{"maintenance_mode": false, "siteTitle": "Baarako"}');
+-- Autorisation globale pour les services et les rôles
+GRANT ALL ON TABLE public.formation_registrations TO anon, authenticated, service_role;
+
