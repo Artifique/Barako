@@ -9,7 +9,6 @@ import { AdminUserAddModal } from "@/components/admin/admin-user-add-modal";
 import { useRouter } from "next/navigation";
 
 export function AdminUserClient({ initialUsers }: { initialUsers: any[] }) {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   return (
@@ -17,9 +16,8 @@ export function AdminUserClient({ initialUsers }: { initialUsers: any[] }) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold text-slate-900">Utilisateurs</h1>
-          <p className="mt-1 text-sm text-slate-600">Activation des comptes et vue des rôles.</p>
+          <p className="mt-1 text-sm text-slate-600">Vue d'ensemble des comptes utilisateurs.</p>
         </div>
-        <Button onClick={() => setOpen(true)}>Ajouter un utilisateur</Button>
       </div>
       <Card glowing className="overflow-x-auto">
         <table className="w-full min-w-[640px] text-left text-sm">
@@ -53,7 +51,6 @@ export function AdminUserClient({ initialUsers }: { initialUsers: any[] }) {
           </tbody>
         </table>
       </Card>
-      <AdminUserAddModal open={open} onOpenChange={setOpen} onCreated={() => router.refresh()} />
     </div>
   );
 }
