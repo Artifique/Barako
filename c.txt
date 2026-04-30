@@ -1,6 +1,1 @@
--- Désactivation de la RLS pour tester l'accès :
-ALTER TABLE public.formation_registrations DISABLE ROW LEVEL SECURITY;
-
--- Politique permissive pour la lecture :
-CREATE POLICY "Allow public read for all" ON public.formation_registrations
-  FOR SELECT USING (true);
+https://barako-iota.vercel.app/
