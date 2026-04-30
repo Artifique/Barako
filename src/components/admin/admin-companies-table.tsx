@@ -40,9 +40,6 @@ export function AdminCompaniesTable({ companies, onEdit, onDelete }: AdminCompan
                   <td className="px-6 py-4 text-sm text-gray-500">{c.responsible_name || 'N/A'}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{c.location || 'N/A'}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{c.responsible_phone || 'N/A'}</td>
-                  <td className="px-6 py-4 text-right text-sm font-medium">
-                    <Button variant="ghost" size="sm" onClick={() => onEdit(c)}>✏️</Button>
-                  </td>
                 </tr>
               ))}
             </tbody>

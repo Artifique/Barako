@@ -12,15 +12,31 @@ export async function getMyCompanyAction() {
   return CompanyService.getCompanyByOwner(supabase, userData.user.id);
 }
 
-export async function createCompanyAction(input: CompanyInsertInput) {
+export async function createCompanyAction(input: any) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return { ok: false as const, error: "Non authentifié" };
-  const res = await CompanyService.createCompany(supabase, userData.user.id, input);
-  if (res.ok) {
-    revalidatePath("/admin/entreprises");
-  }
-  return res;
+  
+  // Mise à jour du profil existant avec les informations entreprise
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      role: 'company',
+      company_name: input.name,
+      company_sector: input.sector,
+      email: input.email,
+      responsible_name: input.responsible_name,
+      responsible_function: input.responsible_function,
+      responsible_phone: input.responsible_phone,
+      company_type: input.company_type
+    })
+    .eq("id", userData.user.id)
+    .select("*")
+    .single();
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath("/admin/entreprises");
+  return { ok: true as const, data: data };
 }
 
 export async function listCompaniesAdminAction() {
@@ -64,7 +80,7 @@ export async function createCompanyAsAdminAction(ownerId: string, input: Company
   return res;
 }
 
-export async function updateCompanyAsAdminAction(id: string, input: CompanyInsertInput) {
+export async function updateCompanyAsAdminAction(id: string, input: any) {
   const supabase = await createClient();
   const res = await CompanyService.updateCompany(supabase, id, input);
   if (res.ok) {

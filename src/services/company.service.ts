@@ -36,12 +36,33 @@ export async function getCompanyById(
 
 export async function updateCompany(
   supabase: SupabaseClient,
-  companyId: string,
-  input: Partial<CompanyInsertInput>
-): Promise<ServiceResult<Company>> {
-  const { data, error } = await supabase.from("companies").update(input).eq("id", companyId).select("*").single();
+  id: string,
+  input: { 
+    name: string; 
+    sector?: string | null; 
+    email?: string | null; 
+    responsible_name?: string | null; 
+    responsible_function?: string | null; 
+    responsible_phone?: string | null; 
+    company_type?: string | null; 
+  }
+): Promise<ServiceResult<any>> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      company_name: input.name,
+      company_sector: input.sector,
+      email: input.email,
+      responsible_name: input.responsible_name,
+      responsible_function: input.responsible_function,
+      responsible_phone: input.responsible_phone,
+      company_type: input.company_type
+    })
+    .eq("id", id)
+    .select("*")
+    .single();
   if (error) return fail(error.message);
-  return ok(data as Company);
+  return ok(data);
 }
 
 export async function listCompaniesForAdmin(supabase: SupabaseClient): Promise<ServiceResult<Company[]>> {

@@ -34,20 +34,8 @@ export function AdminCompaniesPageClient({ companies, companyOwners }: { compani
           title="Gestion des entreprises" 
           subtitle="Consultez et gérez les entreprises partenaires."
         />
-        <Button onClick={handleOpenAddModal}>Ajouter une entreprise</Button>
       </div>
       <AdminCompaniesTable companies={companies} onEdit={handleEdit} onDelete={handleDelete} />
-      
-      <AdminCompanyModal 
-        open={isModalOpen} 
-        onOpenChange={setIsModalOpen} 
-        initialCompany={editingCompany}
-        companyOwners={companyOwners}
-        onSubmitSuccess={() => {
-          setIsModalOpen(false);
-          // Rafraîchissement des données à prévoir (via router.refresh())
-        }}
-      />
     </div>
   );
 }

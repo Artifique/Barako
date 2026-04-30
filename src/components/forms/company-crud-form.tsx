@@ -62,9 +62,12 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
     };
 
     if (isEditMode && initialCompany) {
+      // Pour l'admin, on utilise la mise à jour du profil via updateCompany
       return updateCompanyAsAdminAction(initialCompany.id, companyInput);
     } else {
-      return createCompanyAction(companyInput);
+      // Pour la création, vous devez décider si l'admin crée un profil utilisateur ou une compagnie.
+      // Avec votre nouvelle logique, 'createCompanyAction' crée une entrée dans la table 'companies'.
+      return createCompanyAction(companyInput as any);
     }
   };
 
@@ -74,6 +77,7 @@ export function CompanyCrudForm({ initialCompany, companyOwners, onSubmitSuccess
   );
 
   useEffect(() => {
+    if (!state) return;
     if (state.ok && state.data) {
       toast.success(`Entreprise ${isEditMode ? "mise à jour" : "créée"} avec succès !`);
       onSubmitSuccess?.();
