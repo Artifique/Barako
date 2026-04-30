@@ -139,7 +139,7 @@ export async function signUpWithEmail(
     }
   }
 
-  return { success: "Inscription réussie ! Veuillez consulter vos e-mails pour confirmer votre compte." };
+  return { success: "Inscription réussie ! Bienvenue sur Baarako." };
 }
 
 export async function signOut(): Promise<void> {
