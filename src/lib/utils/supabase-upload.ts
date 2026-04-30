@@ -1,5 +1,7 @@
 export async function uploadFileToSupabase(supabase: any, bucketName: string, file: File) {
-  const fileName = `${Date.now()}-${file.name}`;
+  // Nettoyage du nom de fichier : on ne garde que les caractères sûrs
+  const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+  const fileName = `${Date.now()}-${safeName}`;
   const filePath = `${fileName}`;
 
   const { data: uploadData, error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file);
