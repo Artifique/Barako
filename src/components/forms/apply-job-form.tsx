@@ -27,15 +27,24 @@ export function ApplyJobForm({
     const cover = String(fd.get("cover_letter") ?? "");
     const cvFile = fd.get("cv_file") as File;
     
+    if (!cvFile || cvFile.size === 0) {
+        toast.error("Veuillez sélectionner un fichier CV valide.");
+        return;
+    }
+
     start(async () => {
       let cv_url = null;
-      if (cvFile && cvFile.size > 0) {
+      try {
           const uploadRes = await uploadFileToSupabase(supabase, "bourse-images", cvFile);
           if (!uploadRes.ok) {
-              toast.error("Erreur lors de l'upload du CV.");
+              toast.error("Erreur lors de l'upload du CV : " + (uploadRes.error || "Problème serveur"));
               return;
           }
-          cv_url = uploadRes.data?.url || null;
+          cv_url = uploadRes.data?.url;
+      } catch (err) {
+          console.error("Upload error:", err);
+          toast.error("Une erreur imprévue est survenue lors de l'upload.");
+          return;
       }
 
       const res = await applyToJobAction({
@@ -43,8 +52,11 @@ export function ApplyJobForm({
         cover_letter: cover || null,
         cv_url: cv_url
       });
-      if (res.ok) toast.success("Votre candidature a bien été transmise.");
-      else toast.error(res.error);
+      if (res.ok) {
+          toast.success("Votre candidature a bien été transmise.");
+          (e.target as HTMLFormElement).reset();
+      }
+      else toast.error(res.error || "Erreur lors de la soumission.");
     });
   }
 
